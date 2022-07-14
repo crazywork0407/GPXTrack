@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="en">
+<!-- 28 june 22 - 14:05 ajanky-->
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="apple-touch-fullscreen" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <link href="https://airlog.crwdgs.com/img/airlog167.png" rel="apple-touch-icon">
+      
+    <title>JumpLogger Track View</title>
+
+    <!-- Optional CSS --> 
+    <link rel="stylesheet" href="./dashboard/dashboard.css">
+
+    <!-- Bootstrap CSS -->         
+    <link rel="stylesheet" href="./bootstrap/css/bootstrap.min.css"/> 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/10.0.0/css/bootstrap-slider.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"/> 
+    <link rel="preconnect" href="https://fonts.googleapis.com"> 
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin> 
+    <link href="https://fonts.googleapis.com/css2?family=Exo:wght@300&display=swap" rel="stylesheet">
+    <link href="./css/rangeslider.css" rel="stylesheet">
+
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <link href="https://api.tiles.mapbox.com/mapbox-gl-js/v0.53.0/mapbox-gl.css" rel="stylesheet">
+    <script src="https://api.tiles.mapbox.com/mapbox-gl-js/v0.53.0/mapbox-gl.js"></script>
+    <style>
+        .mapbox-gl-map {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+        .range-slider {
+            width: 100%;
+        }
+    </style>
+</head>  
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="#" > <img src="img/airlog75wh.png" alt="logo"/> </a>
+        <h2 class="titl">jumpLogger<wbr> Track<wbr> View</h2> 
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto"></ul>
+            <div id="navbar-username" style="font-size: 24px; color:#fff; margin-right: 20px; display: none;"></div>
+            <form class="form-inline my-2 my-lg-0" id="navbar-buttons">
+                <button type="button" class="btn btn-warning mr-2" data-toggle="modal" data-target="#loginModal">Login</button>
+            </form>
+        </div>
+    </nav>
+    <div class="container-fluid">
+       <!--  <h1 class="page-title">Track View</h1> -->
+        <div class="row mb-4">
+            <div class="col-md-6 col-sm-12" style="height: 70vh;">
+                <figure id="map1" class="gpxview:Beispiel1.gpx:Karte d-none"></figure>
+                <div class="mapbox-gl-map" id="log-map"></div>
+            </div>
+            <div class="col-md-6 col-sm-12" style="height: 70vh;">
+                <figure id="map1_hp" class="no_x"></figure>
+                <figure id="map1_sp" class="no_x"></figure>
+                <figure id="map1_vp"></figure>
+            </div>
+            <div class="col-md-6 col-12">
+                <div class="play-control mt-4">
+                    <div class="range-slider-wrapper mb-2">
+                        <input type="range" min="0" max="100" step="0.1" value="0" class="range-slider">
+                    </div>
+                    <button class="btn btn-primary btn-play mr-2" id="play">Play</button>
+                    <button class="btn btn-secondary btn-stop" id="stop">Stop</button>
+                </div>
+            </div>
+        </div>
+        <div class="card" style="margin: 25px 0px;">
+            <div class="card-header panel-primary" >
+            LOGBOOK
+            <span id="logbook-username" style="font-size: 18px; margin-left: 150px; float:right; color:#fff; display: none;"></span>
+            </div>
+
+            <div class="table-responsive" style="max-height: 600px; overflow-y: auto; display: inline-block;">
+                <table class="table table-striped">
+                    <thead>
+                       <tr>
+                            <th class="hdr" scope="col">JUMP#</th> 
+                            <th class="hdr" scope="col">DATE</th> 
+                            <th class="hdr" scope="col">TIME</th> 
+                            <th class="hdr" scope="col">PLACE</th> 
+                            <th class="hdr" scope="col">AIRCRAFT</th> 
+                            <th class="hdr" scope="col">MAX ALT</th> 
+                            <th class="hdr" scope="col">MAX SPEED</th> 
+                            <th class="hdr" scope="col">JUMP DESCRIPTION</th> 
+                            <th class="hdr" scope="col">TRACK</th> 
+                            <th class="hdr" scope="col">ACTION</th> 
+                            </tr>                          
+                    </thead>
+                    <tbody id="logbook"></tbody>
+                </table>
+            </div>
+            <a id="downloadGpx" href="" target="_blank" ></a>
+        </div>
+        <div class="row">
+            <div class="col-md-4 col-sm-12">
+                 <iframe id="meteoblue" src="https://www.meteoblue.com/en/weather/maps/widget/Berlin_Berlin_2822224?windAnimation=0lengthunit=metric&zoom=5&autowidth=auto" frameborder="0" scrolling="NO" allowtransparency="true" sandbox="allow-same-origin allow-scripts allow-popups allow-popups-to-escape-sandbox" style="width: 100%; height: 420px"></iframe>
+                 <div>
+                    <a id="meteoblue-sub" href="https://www.meteoblue.com/en/weather/maps/Berlin_Berlin_2822224?utm_source=weather_widget&utm_medium=linkus&utm_content=map&utm_campaign=Weather%2BWidget" target="_blank" rel="noopener">meteoblue</a>
+                </div>
+            </div>
+            <div class="col-md-4 col-sm-12">
+                <div class="card winds-aloft">
+                    <div id="winds-title" class="card-header">wait...</div>
+                    <div class="card-body">
+                        <div class="circle">
+                            <div class="circle-list">
+                                <div class="circle-item-n">N</div>
+                                <div class="circle-item-group">
+                                    <div class="circle-item-w">W</div>
+                                    <div class="circle-item-e">E</div>
+                                </div>
+                                <div class="circle-item-s">S</div>
+                            </div>
+                            <div class="circle-arrow">
+                                <img id="direction-img" style="display: none;" src="./dashboard/arrow_dwn.svg" />
+                            </div>
+                        </div>
+                        <div class="aloft-list">
+                            <div class="aloft-group">
+                                <div id="winds-speed" class="aloft-item aloft-item-top-left"></div>
+                                <div id="winds-direction" class="aloft-item aloft-item-top-right"></div>
+                            </div>
+                            <div class="aloft-group">
+                                <div id="winds-alt" class="aloft-item aloft-item-bottom-left"></div>
+                                <div id="winds-temp" class="aloft-item aloft-item-bottom-right"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <input id="winds-slider" type="text" style="display: none;" />
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 col-sm-12">
+                <div class="lastjump">
+                    <div class="lastjump-header">
+                        <h4>LAST JUMP</h4>
+                    </div>
+                    <div class="lastjump-body">
+                        <div class="lastjump-altitude" id="lastjump-altitude"></div>
+                        <div class="lastjump-date" id="lastjump-date"></div>
+                        <div class="lastjump-place" id="lastjump-place"></div>
+                    </div>
+                </div>
+                <div class="battery">
+                    <h5>Battery</h5>
+                    <div class="progress">
+                        <div id="battery" class="progress-bar bg-success" role="progressbar" style="width: 80%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                </div>
+                <div class="sd-card">
+                    <h5>SD CARD</h5>
+                    <div class="progress">
+                        <div id="sd-card" class="progress-bar bg-danger" role="progressbar" style="width: 30%" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="site-footer">
+        <div class="text-center">
+            <p>
+                &copy; 2022
+                <strong>CRWDgs</strong>. All Rights Reserved
+            </p>
+
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="logModal" tabindex="-1" role="dialog" aria-labelledby="logModalTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">LogData Detail</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="form-group">
+                            <label for="log-number" class="col-form-label">Log Number:</label>
+                            <input type="text" class="form-control" id="log-number" disabled>
+                        </div>
+                        <div class="form-group">
+                            <label for="log-aircraft" class="col-form-label">Aircraft:</label>
+                            <textarea class="form-control" id="log-aircraft"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="log-desc" class="col-form-label">Jump Description:</label>
+                            <textarea class="form-control" id="log-desc"></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" onclick="saveLogItem()">Save</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="loginModalTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">CRWDdgs</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="form-group">
+                            <label for="login-email" class="col-form-label">Email:</label>
+                            <input type="email" class="form-control" id="login-email">
+                        </div>
+                        <div class="form-group">
+                            <label for="login-password" class="col-form-label">Password:</label>
+                            <input type="password" class="form-control" id="login-password">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" onclick="login()">Login</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="./bootstrap/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/10.0.0/bootstrap-slider.min.js"></script>
+    <script src="./GM_Utils/GPX2GM.js?autoload=false"></script>
+    
+    <!-- JS Files -->
+    <script src="./js/rangeslider.min.js"></script>
+    <script src="./js/main.js"></script>
+    <script>
+        var geoapifyKey = "bc1242ec712940f6a0c5972c63b13686";
+        //var serverUrl = "http://localhost:3000/api/";
+        var serverUrl = "https://airlog.crwdgs.com/api/";
+        var first_gpx = false, map, wp = true, first_p = true, first_s = true;
+        var logbookList =[], logbookKeys =[], altSI = [], directionSI = [], speedSI = [], tempSI = [];
+        var timezone = 0;
+        var metric = 1;
+
+        function show(url, filename) {
+            var xhttp = new XMLHttpRequest();
+            var data = new FormData()
+
+            data.append("logFileUrl", url)
+
+            xhttp.onreadystatechange = function () {
+                if (this.readyState == 4 && this.status == 200) {
+                    var myblob = new Blob([this.response], {
+                        type: 'application/gpx+xml'
+                    });
+
+                    var file = new File([myblob], filename, {
+                        type: 'application/gpx+xml',
+                    });
+
+                    var dt = new DataTransfer();
+                    dt.items.add(file);
+                    var files = dt.files;
+
+                    var reader = new FileReader();
+                    reader.readAsText(file, "UTF-8");
+                    reader.onload = function(evt) {
+                        AirLog.drawTrackLine(evt.target.result);
+                    }
+
+                    if (first_s) {
+                        JB.LoadCSS(JB.GPX2GM.Path + "GPX2GM.css");
+                        JB.LoadScript(JB.GPX2GM.Path + "GPX2GM_Defs.js", function () {
+                            JB.Scripte.GPX2GM_Defs = 2;
+                            JB.GPX2GM.setparameters();
+                            if (JB.GPX2GM.GM_usage_ok()) {
+                                first_s = false;
+                                JB.icons = new JB.Icons(JB.GPX2GM.Path);
+                                JB.Debug_Info("Start", "Icons vorbereitet", false);
+                                JB.Scripte.maputils = 1;
+                                if (JB.GPX2GM.parameters.mapapi == "gm") {
+                                    if (location.protocol == "file:")
+                                        JB.LoadScript("https://maps.google.com/maps/api/js?callback=JB.gmcb", function () {
+                                            // _show(files);
+                                        });
+                                    else
+                                        JB.LoadScript("https://maps.google.com/maps/api/js?key=AIzaSyBpn-EB9zTc7b-tKl_qCAeBqDta5Gha3AA&callback=JB.gmcb", function () {
+                                            // _show(files);
+                                        });
+                                    JB.LoadScript(JB.GPX2GM.Path + "gmutils.js", function () { JB.Scripte.maputils = 2; });
+                                }
+                                else {
+                                    JB.LoadScript(JB.GPX2GM.Path + "leaflet/leaflet.js", function () { JB.Scripte.maplib = 2; });
+                                    JB.LoadCSS(JB.GPX2GM.Path + "leaflet/leaflet.css");
+                                    JB.LoadScript(JB.GPX2GM.Path + "osmutils.js", function () { JB.Scripte.maputils = 2; _show(files); });
+                                }
+                            }
+                        });
+                    }
+                    else {
+                        _show(files);
+                    }
+                }
+            };
+            xhttp.open("POST", serverUrl + "dashboard/getLogFile", true);
+            xhttp.send(data);
+        }
+
+        function _show(files) {
+            first_p = true;
+            JB.GPX2GM.setparameters();
+            if (map) {
+                map.Clear();
+            }
+            map = null;
+            map = new JB.makeMap("map1");
+            map.ShowGPX(files, "OSMDE");
+            xferFiles(files);
+        }
+
+        function onSelectGpx(filename, type) {
+            var uid = localStorage.getItem('uid');
+
+            if (type == 'edit') {
+                //Init Modal
+                document.getElementById("log-number").value = logbookList[filename].logNr;
+                document.getElementById("log-aircraft").value = logbookList[filename].logAirc;
+                document.getElementById("log-desc").value = logbookList[filename].logDesc;
+                $('#logModal').modal('show');
+            } else {
+                $.ajax({
+                    type: "POST",
+                    url: serverUrl + "dashboard/getDownloadUrl",
+                    data: { 
+                        uid: uid, 
+                        filename: filename 
+                    }
+                }).then((response) => {
+                    var logFileUrl = response.url;
+                    if (type == 'edit') {
+    
+                    } else if (type == 'view') {
+                        show(logFileUrl, filename);
+                    } else if (type == 'download') {
+                        document.getElementById("downloadGpx").href = logFileUrl;
+                        document.getElementById("downloadGpx").click();
+                    }
+                }).catch((error) => {
+                    console.log("----- error -----", error);
+                })
+            }
+        }
+
+        function getLogbook(uid) {
+            console.log("getLogbook onload");
+            $.ajax({
+                type: "POST",
+                url: serverUrl + "dashboard/getLogbook",
+                data: { uid: uid }
+            }).then((response) => {
+                logbookList = response.data;
+                logbookKeys = response.keys;
+                for (let index = 0; index < logbookKeys.length; index++) {
+                    const key = logbookKeys[index];
+                    var logbookItem = "";
+                    if (!first_gpx && logbookList[key].logFile.length) {
+                        first_gpx = true;
+                        onSelectGpx(logbookList[key].logFile, 'view');
+
+                        metric = ("true" === response.metric);
+                        timezone = parseInt(response.timezone);
+                        console.log ("timezone %i", timezone);
+                        console.log ("units metric %s", metric);
+
+                        if (metric) { document.getElementById('lastjump-altitude').innerHTML = logbookList[key].logAlt + ' m';}
+                        else { document.getElementById('lastjump-altitude').innerHTML = parseInt(logbookList[key].logAlt*3.28) + ' ft';}
+                        document.getElementById('lastjump-date').innerHTML = logbookList[key].logDate + ', ' + logbookList[key].logTime;
+                        document.getElementById('lastjump-place').innerHTML = logbookList[key].logPlace;  // <td>${logbookList[key].logAlt}</td>
+                       
+           
+                        logbookItem = `<tr class="table-active">`;
+                    } else {
+                        logbookItem = `<tr>`;
+                    }
+
+                    if (metric) { var logAlt = parseInt(logbookList[key].logAlt) + ' m'; }
+                    else {  var logAlt = parseInt(logbookList[key].logAlt*3.28) + ' ft';}
+                    logbookItem += `
+                                            <th scope="row">${logbookList[key].logNr}</th>
+                                            <td>${logbookList[key].logDate}</td>
+                                            <td>${logbookList[key].logTime}</td>
+                                            <td>${logbookList[key].logPlace}</td>
+                                            <td>${logbookList[key].logAirc}</td>
+                                            <td>${logAlt}</td> 
+                                            <td>${logbookList[key].logSpd}</td>
+                                            <td>${logbookList[key].logDesc}</td>
+                                            <td>${logbookList[key].logFile}</td>
+                                            <td class="table-button">` +
+                                                (uid ? 
+                                                    `<button type="button" class="btn btn-primary btn-sm mr-2"
+                                                        onClick="onSelectGpx('${logbookList[key].logNr}', 'edit')"
+                                                    >
+                                                        <i class="fa fa-edit"></i>
+                                                    </button>` : ""
+                                                ) +
+                                                (logbookList[key].logFile != " " ?
+                                                    `<button type="button" class="btn btn-primary btn-sm mr-2"
+                                                        onClick="onSelectGpx('${logbookList[key].logFile}', 'view')"
+                                                    >
+                                                        <i class="fa fa-eye"></i>
+                                                    </button>
+                                                    <button type="button" class="btn btn-secondary btn-sm"
+                                                        onClick="onSelectGpx('${logbookList[key].logFile}', 'download')"
+                                                    >
+                                                        <i class="fa fa-download"></i>
+                                                    </button>` : ""
+                                                )+
+                                            `</td>
+                                    </tr>`;
+                    $("#logbook").append(logbookItem);
+                }
+
+                var locationData = response.location;
+                $.ajax({
+                    type: "GET",
+                    url: `https://secure.geonames.org/findNearbyPlaceNameJSON?lat=${locationData.curLat}&lng=${locationData.curLon}&username=crwdgs`
+                }).then((meteoData) => {
+                    var geonameId = meteoData.geonames[0].geonameId;
+                    document.getElementById("meteoblue").src = `https://www.meteoblue.com/en/weather/maps/widget/city_country_${geonameId}?windAnimation=0&windAnimation=1&gust=0&gust=1&satellite=0&cloudsAndPrecipitation=0&cloudsAndPrecipitation=1&temperature=0&temperature=1&sunshine=0&sunshine=1&extremeForecastIndex=0&geoloc=fixed&tempunit=C&windunit=m%252Fs&lengthunit=metric&zoom=5&autowidth=auto`;
+                    document.getElementById("meteoblue-sub").href = `https://www.meteoblue.com/en/weather/maps/city_country_${geonameId}?windAnimation~rainbow~auto~10%20m%20above%20gnd~none`;
+                })
+
+                document.getElementById('battery').style.width = response.battery + '%';  
+                document.getElementById('sd-card').style.width = ((response.cardInfo.usedSize / response.cardInfo.totalSize) * 100).toFixed(0) + '%'; 
+
+                if (uid) {
+                    document.getElementById('navbar-username').style.display = 'block';
+                    document.getElementById('navbar-username').innerHTML = response.callsign ? response.callsign : "";
+                    /////
+                    document.getElementById('logbook-username').style.display = 'block';
+                    document.getElementById('logbook-username').innerHTML = response.username  + "&nbsp;&nbsp;-&nbsp;&nbsp;" + response.license;
+                    /////
+
+                    metric = ("true" === response.metric);
+                    timezone = parseInt(response.timezone);
+
+                }
+            })
+        }
+
+        function getWindsData(uid) {
+            $.ajax({
+                type: "POST",
+                url: serverUrl + "dashboard/getWindsData",
+                data: { uid: uid }
+            }).then((response) => {
+                var locationData = response.location;
+                $.ajax({
+                    type: "GET",
+                    url: `https://api.geoapify.com/v1/geocode/reverse?apiKey=${geoapifyKey}&lat=${locationData.curLat}&lon=${locationData.curLon}&type=city`
+                }).then((geocode) => {
+                    var currentCity = geocode.features[0].properties.city;
+                    var currentCountry = geocode.features[0].properties.country_code;
+                    altSI = response.windsAloft.altSI.slice();
+                    directionSI = response.windsAloft.directionSI;
+                    speedSI = response.windsAloft.speedSI;
+                    tempSI = response.windsAloft.tempSI;
+                    Wtime = parseInt(response.windsAloft.validtime) + timezone;
+
+
+                    document.getElementById('winds-slider').style.display = 'block';
+                    new Slider("#winds-slider", {
+                        min: 0,
+                        max: altSI.length - 23,  // Stop alt values at 5400m
+                        step: 1,
+                        value: 0,
+                        tooltip: 'always',
+                    });
+                    
+                    document.getElementById('winds-title').innerHTML = '<h4> Windsaloft ' + currentCity + ',  <span style = "text-transform:uppercase;" >' + currentCountry + ' </span> at ' + Wtime + ':00h </h4>';
+                    document.getElementById('direction-img').style.display = 'block';
+                    showWinds(0);
+                })
+            })
+        }
+
+        function onload() {
+            var uid = localStorage.getItem("uid");
+            if (uid) {
+                $.ajax({
+                    type: "POST",
+                    url: serverUrl + "dashboard/verifyUid",
+                    data: { uid: uid }
+                }).then((response) => {
+                    if (response.status) {
+                        getLogbook(uid);
+                        getWindsData(uid);
+                        document.getElementById("navbar-buttons").innerHTML = `
+                            <button type="button" class="btn btn-success mr-2">
+                                <a style="color: #fff; text-decoration: none;" href="./config.html">Config</a>
+                            </button>
+                            <button type="button" class="btn btn-danger mr-2" onclick="logout()">Logout</button>`;
+                    } else {
+                        localStorage.removeItem("uid");
+                        getLogbook();
+                        getWindsData();
+                        document.getElementById("navbar-buttons").innerHTML = `<button type="button" class="btn btn-success mr-2" data-toggle="modal" data-target="#loginModal">Login</button>`;
+                    }
+                })
+            } else {
+                getLogbook();
+                getWindsData();
+                document.getElementById("navbar-buttons").innerHTML = `<button type="button" class="btn btn-success mr-2" data-toggle="modal" data-target="#loginModal">Login</button>`;
+            }
+        }
+
+        function saveLogItem() {
+            var logNr = document.getElementById("log-number").value;
+            var logAirc = document.getElementById("log-aircraft").value;
+            var logDesc = document.getElementById("log-desc").value;
+            if (!logNr || !logbookList[logNr] || !logAirc || !logDesc) {
+                alert("Please enter all log detail info!");
+            }
+
+            var newLogData = logbookList[logNr];
+            newLogData.uid = localStorage.getItem('uid');
+            newLogData.logAirc = logAirc;
+            newLogData.logDesc = logDesc;
+            if (newLogData.logFile != " ") {
+                newLogData.logFile = newLogData.logFile.slice(0, newLogData.logFile.length - 4);
+            }
+            $.ajax({
+                type: "POST",
+                url: serverUrl + "dashboard/saveLogData",
+                data: newLogData
+            }).then((response) => {
+                if (response.status) {
+                    $('#logModal').modal('hide');
+
+                    logbookList = response.data;
+                    logbookKeys = response.keys;
+                    document.getElementById("logbook").innerHTML = "";
+                    var uid = localStorage.getItem("uid");
+                    console.log(logbookList);
+                    for (let index = 0; index < logbookKeys.length; index++) {
+                        const key = logbookKeys[index];
+                        var logbookItem = "";
+                        if (!first_gpx && logbookList[key].logFile.length) {
+                            first_gpx = true;
+                            logbookItem = `<tr class="table-active">`;
+                        } else {
+                            logbookItem = `<tr>`;
+                        }
+
+                        logbookItem += `
+                                                <th scope="row">${logbookList[key].logNr}</th>
+                                                <td>${logbookList[key].logDate}</td>
+                                                <td>${logbookList[key].logTime}</td>
+                                                <td>${logbookList[key].logPlace}</td>
+                                                <td>${logbookList[key].logAirc}</td>
+                                                <td>${logbookList[key].logAlt}</td>
+                                                <td>${logbookList[key].logSpd}</td>
+                                                <td>${logbookList[key].logDesc}</td>
+                                                <td>${logbookList[key].logFile}</td>
+                                                <td class="table-button">` +
+                                                    (uid ? 
+                                                        `<button type="button" class="btn btn-primary btn-sm mr-2"
+                                                            onClick="onSelectGpx('${logbookList[key].logNr}', 'edit')"
+                                                        >
+                                                            <i class="fa fa-edit"></i>
+                                                        </button>` : ""
+                                                    ) +
+                                                    (logbookList[key].logFile != " " ?
+                                                        `<button type="button" class="btn btn-primary btn-sm mr-2"
+                                                            onClick="onSelectGpx('${logbookList[key].logFile}', 'view')"
+                                                        >
+                                                            <i class="fa fa-eye"></i>
+                                                        </button>
+                                                        <button type="button" class="btn btn-secondary btn-sm"
+                                                            onClick="onSelectGpx('${logbookList[key].logFile}', 'download')"
+                                                        >
+                                                            <i class="fa fa-download"></i>
+                                                        </button>` : ""
+                                                    )+
+                                                `</td>
+                                        </tr>`;
+                        $("#logbook").append(logbookItem);
+                    }
+                } else {
+                    alert(response.message);
+                }
+            }).catch((error) => {
+                console.log("----- error -----", error);
+            })
+        }
+
+        function login() {
+            var email = document.getElementById("login-email").value;
+            var password = document.getElementById("login-password").value;
+
+            if (!email && !password) {
+                alert("Please enter email and password exactly!");
+            }
+
+            $.ajax({
+                type: "POST",
+                url: serverUrl + "dashboard/login",
+                data: {
+                    email: email,
+                    password: password
+                }
+            }).then((response) => {
+                if (response.status) {
+                    localStorage.setItem("uid", response.uid);
+                    window.location.reload();
+                } else {
+                    alert(response.message);
+                }
+            }).catch((error) => {
+                alert("Server Error");
+            })
+        }
+
+        function logout() {
+            localStorage.removeItem('uid');
+            window.location.reload();
+        }
+
+        function showWinds(value) {
+            if (metric) {document.getElementById('winds-alt').innerText = altSI[value] + ' m';}
+            else {document.getElementById('winds-alt').innerText = (altSI[value] * 3.3334).toFixed(0) + ' ft';}
+            document.getElementById('winds-direction').innerText = directionSI[altSI[value]] + "º";
+            if (metric) { document.getElementById('winds-speed').innerText = (speedSI[altSI[value]]/3.6).toFixed(0) + " m/s";}
+            else  { document.getElementById('winds-speed').innerText = (speedSI[altSI[value]]*0.534).toFixed(0) + " kts";}
+            if (metric) {document.getElementById('winds-temp').innerText = tempSI[altSI[value]] + " ºC";}
+            else  {document.getElementById('winds-temp').innerText = (tempSI[altSI[value]] * 9/5 +32).toFixed(0) + " ºF";}
+            document.getElementById("direction-img").style.transform = `scale(${speedSI[altSI[value]]/125+0.3}) rotate(${directionSI[altSI[value]]}deg)`;
+        }
+
+        $('#winds-slider').on('slide', function(event){
+            showWinds(event.value);
+        });
+
+        var xferFiles = function (files) {
+            for (var i = 0, f; f = files[i]; i++) {
+                //console.log("Dropzone content-type: " + f.type);
+
+                var reader = new FileReader();
+
+                // Closure to capture the file information.
+                reader.onload = (function (theFile) {
+                    return function (e) {
+                        var data;
+                        try {
+                            data = (new DOMParser()).parseFromString(e.target.result, "text/xml");
+                        } catch (err) {
+                            console.log(err);
+                            alert("a minor data loading hiccup");
+                            return;
+                        }
+                        if (!data) return;
+
+                        var loadSucess = d3gpx.loadGPXViewer(data);
+
+                        if (!loadSucess) return;
+
+                        //document.title = "d3.gpx - " + theFile.name.split(".")[0];
+                        document.title = "d3.gpx - " + theFile.name;
+
+                        var desc = document.getElementById("appTitle").getElementsByClassName("sample")[0];
+                        //desc.innerHTML = theFile.name.split(".")[0].substr(0,17)+"...";
+                        desc.innerHTML = theFile.name;
+                    };
+                })(f);
+
+                reader.readAsText(f); // Read in the image file as a data URL.
+            }
+        }
+
+        onload();
+    </script>
+</body>
+
+</html>

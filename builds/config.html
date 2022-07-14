@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html>
+<!-- 28 june 22 - 16:30 ajanky-->
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>JumpLogger Configuration</title>
+
+    <!-- Optional CSS -->
+    <link rel="stylesheet" href="./config/config.css">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="./bootstrap/css/bootstrap.min.css"/> 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/10.0.0/css/bootstrap-slider.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"/> 
+    <link rel="preconnect" href="https://fonts.googleapis.com"> 
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin> 
+    <link href="https://fonts.googleapis.com/css2?family=Exo:wght@300&display=swap" rel="stylesheet">      
+    <link rel=”apple-touch-icon” href=img/apple-touch-icon.png”>   
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="#" > <img src="img/airlog75wh.png" alt="logo"/> </a>
+        <h2 class="titl">Airlog<wbr> configuration<wbr> page</h2> 
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto"></ul>
+            <div id="navbar-username" style="font-size: 24px; color:#fff; margin-right: 20px; display: none;"></div>
+            <form class="form-inline my-2 my-lg-0">
+                <button type="button" class="btn btn-success mr-2">
+                    <a style="color: #fff; text-decoration: none;" href="/">Home</a>
+                </button>
+                <button type="button" class="btn btn-success mr-2" onclick="updateConfig()">Update</button>
+                <button type="button" class="btn btn-danger" onclick="logout()">Logout</button>
+            </form>
+        </div>
+    </nav>
+    <div class="container">
+        <p></p>
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">User</h4>
+                <form>
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label">User Name | License</label>
+                        <div class="col-sm-10">
+                            <div class="row">
+                                <div class="col">
+                                    <input id="username" type="text" class="form-control" placeholder="Username">
+                                </div>
+                                <div class="col">
+                                    <input id="license" type="text" class="form-control" placeholder="license number">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label">Email | Callsign</label>
+                        <div class="col-sm-10">
+                            <div class="row">
+                                <div class="col">
+                                    <input id="email" type="text" class="form-control" placeholder="Valid Email Address">
+                                </div>
+                                <div class="col">
+                                    <input id="callsign" type="text" class="form-control" placeholder="your nickname">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label">WiFi SSID1</label>
+                        <div class="col-sm-10">
+                            <div class="row">
+                                <div class="col">
+                                    <input id="ssid1" type="text" class="form-control" placeholder="SSID">
+                                </div>
+                                <div class="col">
+                                    <input id="ssid1_pass" type="password" class="form-control" placeholder="Password">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label">WiFi SSID2</label>
+                        <div class="col-sm-10">
+                            <div class="row">
+                                <div class="col">
+                                    <input id="ssid2" type="text" class="form-control" placeholder="SSID">
+                                </div>
+                                <div class="col">
+                                    <input id="ssid2_pass" type="password" class="form-control" placeholder="Password">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label">WiFi SSID3</label>
+                        <div class="col-sm-10">
+                            <div class="row">
+                                <div class="col">
+                                    <input id="ssid3" type="text" class="form-control" placeholder="SSID">
+                                </div>
+                                <div class="col">
+                                    <input id="ssid3_pass" type="password" class="form-control" placeholder="Password">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                     -->
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label">Start Jump# | Timezone</label>
+                        <div class="col-sm-10">
+                            <div class="row">
+                                <div class="col">
+                                    <input id="jump_start_number" type="number" class="form-control" placeholder="jumps">
+                                </div>
+                                <div class="col">
+                                    <input id="timezone" type="number" class="form-control" placeholder="UTC + xx">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Altimeter</h4>
+                <form>
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label">Units metric/imperial</label>
+                        <div class="col-sm-10">
+                            <div class="form-check form-check-inline">
+                                <input id="units_metric" type="checkbox" class="form-check-input" value="option1">
+                                <label class="form-check-label" for="units_metric">metric</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label">Special commands</label>
+                        <div class="col-sm-10">
+                            <input id="altimeter_command" type="text" class="form-control" placeholder="">
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Logger</h4>
+                <form>
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label">File Formats</label>
+                        <div class="col-sm-10">
+                            <input id="file_format" type="text" class="form-control" placeholder="GPX file">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label">Special commands</label>
+                        <div class="col-sm-10">
+                            <input id="logger_command" type="text" class="form-control" placeholder="">
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <!--
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Variometer</h4>
+                <form>
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label">Output</label>
+                        <div class="col-sm-10">
+                            <input id="variometer_output" type="text" class="form-control" placeholder="Bluetooth">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label">BT device name</label>
+                        <div class="col-sm-10">
+                            <input id="bt_device" type="text" class="form-control" placeholder="">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label">Special commands</label>
+                        <div class="col-sm-10">
+                            <input id="variometer_command" type="text" class="form-control" placeholder="">
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+         -->
+    </div>
+
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+    <script src="./bootstrap/js/bootstrap.min.js"></script>
+    <script>
+        var configKeys = [
+            "username",
+            "license",
+            "email",
+            "callsign",
+            "ssid1",
+            "ssid1_pass",
+            // "ssid2",
+            // "ssid2_pass",
+            // "ssid3",
+            // "ssid3_pass",
+            "jump_start_number",
+            "timezone",
+            "units_metric",
+            "altimeter_command",
+            "file_format",
+            "logger_command",
+            // "variometer_output",
+            // "bt_device",
+            // "variometer_command"
+        ];
+        //var serverUrl = "http://localhost:3000/api/";
+        var serverUrl = "https://airlog.crwdgs.com/api/";
+
+        function onload() {
+            var uid = localStorage.getItem('uid');
+            if (uid) {
+                $.ajax({
+                    type: "POST",
+                    url: serverUrl + "config/getCardConfig",
+                    data: { uid: uid }
+                }).then((response) => {
+                    if (response.data) {
+                        for (let index = 0; index < configKeys.length; index++) {
+                            const key = configKeys[index];
+                            if (key == 'units_metric') {
+                                if (response.data[key] == "true") {
+                                    document.getElementById(key).checked = true;
+                                } else {
+                                    document.getElementById(key).checked = false;
+                                }
+                            } else {
+                                document.getElementById(key).value = response.data[key];
+                            }
+                        }
+    
+                        document.getElementById('navbar-username').innerHTML = response.data.callsign? response.data.callsign : "";
+                    }
+                    document.getElementById('navbar-username').style.display = 'block';
+                }).catch((error) => {
+                    console.log(error);
+                })
+            } else {
+                window.location.pathname = '/';
+            }
+        }
+
+        function updateConfig(params) {
+            var uid = localStorage.getItem('uid');
+            var configData = {};
+            for (let index = 0; index < configKeys.length; index++) {
+                const key = configKeys[index];
+                if (key == 'units_metric' || key == 'units_imperial') {
+                    configData[key] = document.getElementById(key).checked;
+                } else {
+                    configData[key] = document.getElementById(key).value;
+                }
+            }
+
+            $.ajax({
+                type: "POST",
+                url: serverUrl + "config/updateCardConfig",
+                data: { uid: uid, configData: configData }
+            }).then((response) => {
+                if (response.status) {
+                    alert("Config data updated successfully");
+                    console.log(configData.username);
+                    document.getElementById('navbar-username').innerHTML = configData.callsign ? configData.callsign : "";
+                } else {
+                    alert("Server Error");
+                }
+            }).catch((error) => {
+                alert("Server Error");
+            })
+        }
+
+        function logout() {
+            localStorage.removeItem('uid');
+            window.location.pathname = '/';
+        }
+
+        onload();
+    </script>
+</body>
+
+</html>

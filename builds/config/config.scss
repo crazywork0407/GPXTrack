@@ -1,0 +1,25 @@
+body {
+    background-color: #eaeaea !important;
+    color: #818181 !important;
+}
+
+.container {
+
+    @media (max-width: 992px) {
+        #navbar-username {
+            display: none !important;
+        }
+    }
+
+    .page-title {
+        text-transform: uppercase;
+    }
+
+    .card {
+        margin-bottom: 30px;
+
+        .card-title {
+            text-transform: uppercase;
+        }
+    }
+}

@@ -1,0 +1,258 @@
+body {
+    background-color: #eaeaea !important;
+    color: #818181 !important;
+}
+
+@media (max-width: 992px) {
+    #navbar-username {
+        display: none !important;
+    }
+}
+
+figure {
+    margin: 0 !important;
+    padding: 0;
+}
+
+#map1 {
+    height: 100%;
+}
+
+#map1_hp {
+    height: calc((100% + 64px)/3);
+    margin-top: 22px !important;
+}
+
+#map1_sp {
+    height: calc((100% + 64px)/3);
+    margin-top: -37px !important;
+}
+
+#map1_vp {
+    height: calc((100% + 64px)/3);
+    margin-top: -37px !important;
+}
+
+.card-header {
+    background-color: #007bff !important;
+    border-color: #007bff;
+    color: #ffffff;
+}
+
+.table-button {
+    background-color: #ffffff !important;
+    border: 0px !important;
+}
+
+.winds-aloft {
+    height: 420px;
+
+    .circle {
+        position: absolute;
+        height: 300px;
+        width: 300px;
+        left: 50%;
+        top: 50%;
+        border-radius: 50%;
+        border: 3px solid #c0c7da;
+        transform: translate(-50%, calc(-50% + 12.5px));
+
+        .circle-list {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            font-size: 18px;
+
+            .circle-item-n {
+                height: 33%;
+                text-align: center;
+            }
+
+            .circle-item-group {
+                display: flex;
+                align-items: center;
+                height: 33%;
+
+                .circle-item-w {
+                    width: 50%;
+                    margin-left: 3px;
+                }
+
+                .circle-item-e {
+                    width: 50%;
+                    text-align: end;
+                    margin-right: 3px;
+                }
+            }
+
+            .circle-item-s {
+                height: 33%;
+                display: flex;
+                align-items: end;
+                justify-content: center;
+            }
+        }
+
+        .circle-arrow {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            display: flex;
+            justify-content: center;
+
+            img {
+                width: 230px;
+                transform: rotate(30deg);
+            }
+        }
+    }
+
+    .card-footer {
+        height: 30px;
+        padding: 0px;
+        background-color: #929292;
+        padding: 0px 25px;
+    }
+
+    .slider.slider-horizontal {
+        width: 100%;
+        height: 100%;
+    }
+
+    .slider-selection {
+        background: #929292;
+        background-image: none;
+        border: none;
+        box-shadow: none;
+    }
+
+    .slider-track {
+        background-color: #929292;
+        background-image: none;
+        border: none;
+        box-shadow: none;
+    }
+
+    .slider-handle {
+        top: 2px;
+        width: 50px;
+        height: 25px;
+    }
+
+    .slider-handle.round {
+        border-radius: 10px;
+    }
+
+    .slider.slider-horizontal .slider-tick, .slider.slider-horizontal .slider-handle {
+        margin-left: -25px;
+    }
+}
+
+.aloft-list {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+
+    .aloft-group {
+        display: flex;
+        height: 50%;
+
+        .aloft-item {
+            width: 50%;
+            font-size: 30px;
+        }
+
+        .aloft-item-top-left {
+            text-align: left;
+        }
+
+        .aloft-item-top-right {
+            text-align: right;
+        }
+
+        .aloft-item-bottom-left {
+            display: flex;
+            align-items: end;
+            justify-content: left;
+        }
+
+        .aloft-item-bottom-right {
+            display: flex;
+            align-items: end;
+            justify-content: right;
+        }
+    }
+}
+
+.lastjump {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #4ecdc4;
+    height: 280px;
+
+    .lastjump-header {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        height: 50px;
+        background-color: #43b0aa;
+        font-size: 32px;
+        color: #ffffff;
+    }
+
+    .lastjump-body {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+
+        .lastjump-altitude {
+            font-size: 52px;
+        }
+
+        .lastjump-date {
+            font-size: 24px;
+        }
+
+        .lastjump-place {
+            font-size: 24px;
+        }
+    }
+}
+
+.progress {
+    background-color: #ffffff !important;
+}
+
+.battery {
+    margin-top: 10px;
+}
+
+.sd-card {
+    margin-top: 10px;
+}
+
+.site-footer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #ffffff;
+    width: 100%;
+    height: 50px;
+    background-color: #4ecdc4;
+
+    p {
+        margin: 0px;
+    }
+}
+
+#gpxCtr {
+    width: 100%;
+    height: 100%;
+}

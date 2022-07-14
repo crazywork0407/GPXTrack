@@ -1,0 +1,32 @@
+body {
+  background-color: #eaeaea !important;
+  color: #818181 !important;
+}
+
+@media (max-width: 992px) {
+  .container #navbar-username {
+    display: none !important;
+  }
+}
+
+.container .page-title {
+  text-transform: uppercase;
+}
+
+.container .card {
+  margin-bottom: 30px;
+}
+
+.container .card .card-title {
+  text-transform: uppercase;
+}
+
+.titl
+{
+  text-align:center; 
+  font-family: 'Exo';
+  margin-left: 50px;
+  color: #ffffff; 
+}
+
+/*# sourceMappingURL=config.css.map */
