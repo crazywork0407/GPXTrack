@@ -1,0 +1,32 @@
+.mapbox-gl-map {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+.range-slider {
+    width: 100%;
+}
+
+.track-info {
+    position: absolute;
+    left: 30px;
+    top: 35px;
+    margin: 0;
+    padding: 10px;
+    min-width: 120px;
+    list-style: none;
+    font-size: 10px;
+    color: #222;
+    background-color: rgba(240,240,240,.6);
+}
+
+/* Graphs */
+.track-graph {
+    position: relative;
+    height: calc((100% - 40px) / 3);
+    width: 100%;
+    border: 1px solid #e1e1e1;
+}
+.track-graph + .track-graph {
+    margin-top: 20px !important;
+}

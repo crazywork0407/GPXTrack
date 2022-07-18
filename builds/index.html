@@ -23,20 +23,11 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin> 
     <link href="https://fonts.googleapis.com/css2?family=Exo:wght@300&display=swap" rel="stylesheet">
     <link href="./css/rangeslider.css" rel="stylesheet">
+    <link href="./css/style.css" rel="stylesheet">
 
     <script src="https://d3js.org/d3.v5.min.js"></script>
     <link href="https://api.tiles.mapbox.com/mapbox-gl-js/v0.53.0/mapbox-gl.css" rel="stylesheet">
     <script src="https://api.tiles.mapbox.com/mapbox-gl-js/v0.53.0/mapbox-gl.js"></script>
-    <style>
-        .mapbox-gl-map {
-            position: relative;
-            width: 100%;
-            height: 100%;
-        }
-        .range-slider {
-            width: 100%;
-        }
-    </style>
 </head>  
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -57,16 +48,18 @@
     <div class="container-fluid">
        <!--  <h1 class="page-title">Track View</h1> -->
         <div class="row mb-4">
-            <div class="col-md-6 col-sm-12" style="height: 70vh;">
-                <figure id="map1" class="gpxview:Beispiel1.gpx:Karte d-none"></figure>
-                <div class="mapbox-gl-map" id="log-map"></div>
-            </div>
-            <div class="col-md-6 col-sm-12" style="height: 70vh;">
-                <figure id="map1_hp" class="no_x"></figure>
-                <figure id="map1_sp" class="no_x"></figure>
-                <figure id="map1_vp"></figure>
-            </div>
-            <div class="col-md-6 col-12">
+            <div class="col-md-6 col-sm-12 pt-4">
+                <div class="map-wrapper" style="height: 70vh;">
+                    <div class="mapbox-gl-map" id="log-map"></div>
+                    <ul class="track-info">
+                        <li><label>Lat:</label><span class="lat"></span></li>
+                        <li><label>Lon:</label><span class="lon"></span></li>
+                        <li><label>Alt:</label><span class="alt"></span>m</li>
+                        <li><label>Speed:</label><span class="speed"></span>m/s</li>
+                        <li><label>Course:</label><span class="course"></span>`</li>
+                        <li><label>Sink:</label><span class="sink"></span>m/s</li>
+                    </ul>
+                </div>
                 <div class="play-control mt-4">
                     <div class="range-slider-wrapper mb-2">
                         <input type="range" min="0" max="100" step="0.1" value="0" class="range-slider">
@@ -74,6 +67,11 @@
                     <button class="btn btn-primary btn-play mr-2" id="play">Play</button>
                     <button class="btn btn-secondary btn-stop" id="stop">Stop</button>
                 </div>
+            </div>
+            <div class="col-md-6 col-sm-12 mt-4" style="height: 70vh;">
+                <figure class="track-graph" data-x="time" data-y="altitude" data-x-label="Time" data-y-label="Altitude"></figure>
+                <figure class="track-graph" data-x="time" data-y="speed" data-x-label="Time" data-y-label="Speed"></figure>
+                <figure class="track-graph" data-x="time" data-y="skinrate" data-x-label="Time" data-y-label="Altitude"></figure>
             </div>
         </div>
         <div class="card" style="margin: 25px 0px;">

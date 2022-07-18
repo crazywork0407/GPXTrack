@@ -42,6 +42,16 @@ AirLog.path = false;
 AirLog.pos = Array();
 
 /**
+ * Graph Variables
+ * 
+ * @since 1.0.0
+ */
+AirLog.$graphs = false;
+AirLog.graphs = Array();
+AirLog.xLength = 1000;
+AirLog.yLength = 150;
+
+/**
  * Time Variables
  * 
  * @since 1.0.0
@@ -78,6 +88,16 @@ AirLog.pathGenerator = d3.line()
     .curve(d3.curveLinear);
 
 /**
+ * Graph Path Generator
+ * 
+ * @since 1.0.0
+ */
+AirLog.graphPathGenerator = d3.line()
+    .x(function (d) { return d.x; })
+    .y(function (d) { return d.y * AirLog.yLength / 100; })
+    .curve(d3.curveLinear);
+
+/**
  * Get Track Info
  * 
  * @since 1.0.0
@@ -88,15 +108,16 @@ AirLog.getTrackInfo = function (data) {
     $trackPoints = $(doc).find("trkpt");
     AirLog.trackInfo = Array();
     AirLog.trackPoints = Array();
+    AirLog.timePos = 0;
 
     $trackPoints.each(function (index, element) {
         let $element = $(element);
         AirLog.trackInfo.push({
             'lat': $element.attr('lat'),
             'lon': $element.attr('lon'),
-            'ele': $element.find('ele').text(),
+            'altitude': $element.find('ele').text(),
             'time': $element.find('time').text(),
-            'gpsalt': $element.find('gpsalt').text(),
+            'sinkrate': $element.find('gpsalt').text(),
             'speed': $element.find('speed').text()
         });
 
@@ -155,8 +176,10 @@ AirLog.render = function () {
  * @since 1.0.0
  */
 AirLog.drawTrackLine = function (data) {
+    // Get Data From Files
     AirLog.getTrackInfo(data);
 
+    // MapBox Functions
     if (!AirLog.d3svg.select("path").empty()) {
         AirLog.d3svg.select("path").remove();
     }
@@ -171,6 +194,9 @@ AirLog.drawTrackLine = function (data) {
 
     AirLog.pos = Array(AirLog.trackPoints[0]);
 
+    if (!AirLog.d3svg.select("circle").empty()) {
+        AirLog.d3svg.select("circle").remove();
+    }
     AirLog.dot = AirLog.d3svg
         .selectAll("circle")
         .data(AirLog.pos)
@@ -180,6 +206,19 @@ AirLog.drawTrackLine = function (data) {
         .style("fill", "#ff0000");
 
     AirLog.map.flyTo({ center: [AirLog.trackPoints[0].x, AirLog.trackPoints[0].y] });
+
+    AirLog.showInformation();
+
+    console.log(AirLog.graphs);
+    // Graph Functions
+    AirLog.graphs.forEach(function (item, index) {
+        var points = AirLog.getGraphPoints(item.xAxis, item.yAxis);
+        console.log(points);
+        AirLog.graphs[index].path = AirLog.drawGraph(item.svg, points);
+    });
+
+    $(window).on('resize', AirLog.renderGraph);
+    AirLog.renderGraph();
 
     AirLog.map.on("viewreset", AirLog.render);
     AirLog.map.on("move", AirLog.render);
@@ -195,52 +234,178 @@ AirLog.drawTrackLine = function (data) {
 AirLog.timerHandle = function () {
     AirLog.pos = Array(AirLog.trackPoints[AirLog.timePos]);
 
-    AirLog.dot = AirLog.d3svg
-        .selectAll("circle")
-        .data(AirLog.pos)
-        .enter()
-        .append("circle")
-        .attr("r", 5)
-        .style("fill", "#ff0000");
+    AirLog.dot.data(AirLog.pos);
 
     if (false != AirLog.timerID && AirLog.trackPoints.length == AirLog.timePos) {
         clearInterval(AirLog.timerID);
     }
 
+    AirLog.render();
+
+    // Time Slider
+    var currentPos = AirLog.timePos * 100 / AirLog.trackPoints.length;
+    $('.range-slider').val(currentPos);
+
+    // Showing Information
+    AirLog.showInformation();
+
     AirLog.timePos++;
 }
 
 /**
- * OnPlay
+ * Init Graph
+ * 
+ * @since 1.0.0
+ */
+AirLog.initGraph = function (selector) {
+    var $selector = $(selector);
+
+    AirLog.$graphs = $selector;
+
+    AirLog.xLength = $selector.outerWidth();
+    AirLog.yLength = $selector.outerHeight() - 10;
+
+    $selector.each(function () {
+        var $this = $(this);
+
+        AirLog.graphs.push({
+            svg: d3.select(this)
+                .append("svg")
+                .attr("width", "100%")
+                .attr("height", "100%")
+                .style("position", "absolute")
+                .style("z-index", 2),
+            xAxis: $this.data('x'),
+            yAxis: $this.data('y'),
+            xAxisLabel: $this.data('x-label'),
+            yAxisLabel: $this.data('y-label')
+        });
+    });
+}
+
+/**
+ * Get graph information
+ * 
+ * @since 1.0.0
+ * 
+ * @param {String} x - X Axis Key
+ * @param {String} y - Y Axis Key
+ * 
+ * @return Array - return graph points
+ */
+AirLog.getGraphPoints = function (x = 'time', y = 'altitude') {
+    var result = Array(),
+        index = 0,
+        maxYValue = 0;
+
+    AirLog.trackInfo.forEach(function (item) {
+        if (maxYValue < parseFloat(item[y])) {
+            maxYValue = parseFloat(item[y]);
+        }
+
+        result.push({
+            x: index,
+            y: parseFloat(item[y])
+        });
+
+        index++;
+    })
+
+    return result.map(function (item) {
+        item.y = 100 - (item.y * 100 / maxYValue);
+        return item;
+    });
+}
+
+/**
+ * Draw Graph
+ * 
+ * @since 1.0.0
+ * 
+ * @param {Object} graphSVG - SVG Object for Graph
+ * @param {Array} points - Point Arrat
+ * 
+ * @return Array - return graph points
+ */
+AirLog.drawGraph = function (graphSVG, points) {
+    if (!graphSVG.select("path").empty()) {
+        graphSVG.select("path").remove();
+    }
+
+    var path = graphSVG
+        .append("path")
+        .datum(points)
+        .attr("class", "track-path")
+        .attr("d", AirLog.graphPathGenerator)
+        .attr("stroke", "#999")
+        .attr("stroke-width", 2)
+        .attr("fill", "none");
+
+    return path;
+}
+
+/**
+ * Render Graph
+ * 
+ * @since 1.0.0
+ */
+AirLog.renderGraph = function () {
+    AirLog.xLength = AirLog.$graphs.outerWidth();
+    AirLog.yLength = AirLog.$graphs.outerHeight() - 3;
+
+    AirLog.graphs.forEach(function (item) {
+        item.path
+            .attr("d", AirLog.graphPathGenerator);
+    });
+}
+
+/**
+ * Show Information on Tip
+ */
+AirLog.showInformation = function () {
+    var index = 0;
+    Object.values(AirLog.trackInfo[AirLog.timePos]).forEach(function (value) {
+        var keys = Object.keys(AirLog.trackInfo[AirLog.timePos]);
+        $('.track-info').find('.' + keys[index]).html(value);
+        index++;
+    });
+}
+
+/**
+ * Init Play Button.
  * 
  * @since 1.0.0
  */
 AirLog.initPlayButton = function (selector) {
-    $(selector).on('click', function (e) {
+    $('body').on('click', selector, function (e) {
         AirLog.timerID = setInterval(AirLog.timerHandle, 200);
     })
 }
 
-
 /**
- * Init Range Slider
+ * Initialize Stop Button
  * 
  * @since 1.0.0
  */
+AirLog.initStopButton = function (selector) {
+    $('body').on('click', selector, function (e) {
+        clearInterval(AirLog.timerID);
+    })
+}
+
+/**
+ * Initialize Range Slider
+ * 
+ */
 AirLog.initRangeSlider = function (selector) {
-    if ('function' == typeof $.fn.rangeslider) {
-        $(selector).rangeslider({
-            onInit: function () {
+    $('body').on('input', selector, function (e) {
+        var $this = $(this);
 
-            },
-            onSlide: function () {
-
-            },
-            onSlideEnd: function () {
-
-            }
-        });
-    }
+        AirLog.timePos = Number($this.val() * AirLog.trackPoints.length / 100).toFixed(0);
+        AirLog.pos = Array(AirLog.trackPoints[AirLog.timePos]);
+        AirLog.dot.data(AirLog.pos);
+        AirLog.render();
+    })
 };
 
 /**
@@ -250,11 +415,8 @@ AirLog.initRangeSlider = function (selector) {
  */
 (function ($) {
     AirLog.initMapBox();
-})(jQuery);
-
-/**
- * Document Ready Event
- */
-$(document).on('ready', function () {
+    AirLog.initGraph('.track-graph');
     AirLog.initPlayButton('.play-control .btn-play');
-});
+    AirLog.initStopButton('.play-control .btn-stop');
+    AirLog.initRangeSlider('.play-control .range-slider');
+})(jQuery);
