@@ -73,6 +73,7 @@ AirLog.timerID = false;
  * @since 1.0.0
  */
 AirLog.project = function (d) {
+    console.log(d);
     return AirLog.map.project(new mapboxgl.LngLat(d.x, d.y));
 }
 
@@ -106,34 +107,92 @@ AirLog.graphPathGenerator = d3.line()
     .curve(d3.curveLinear);
 
 /**
+ * CSV to Array
+ * 
+ * @since 1.0.0
+ * 
+ * @param {String} str 
+ */
+AirLog.csvToArray = function (str, delimiter = ",") {
+    // slice from start of text to the first \n index
+    // use split to create an array from string by delimiter
+    const headers = str.slice(0, str.indexOf("\n")).split(delimiter);
+
+    // slice from \n index + 1 to the end of the text
+    // use split to create an array of each csv value row
+    const rows = str.slice(str.indexOf("\n") + 1).split("\n");
+
+    // Map the rows
+    // split values from each row into an array
+    // use headers.reduce to create an object
+    // object properties derived from headers:values
+    // the object passed as an element of the array
+    const arr = rows.map(function (row) {
+        const values = row.split(delimiter);
+        if (values.length > 2) {
+            const el = headers.reduce(function (object, header, index) {
+                object[header] = values[index];
+                return object;
+            }, {});
+            return el;
+        }
+    });
+
+    // return the array
+    return arr.filter(function (item) {
+        if (undefined != item) {
+            return true;
+        }
+        return false;
+    });
+}
+
+/**
  * Get Track Info
  * 
  * @since 1.0.0
  */
 AirLog.getTrackInfo = function (data) {
-    data = data.replaceAll("gpxtpx:", "");
-    var doc = $.parseXML(data);
-    $trackPoints = $(doc).find("trkpt");
+    // CSV Files
     AirLog.trackInfo = Array();
     AirLog.trackPoints = Array();
     AirLog.timePos = 0;
 
-    $trackPoints.each(function (index, element) {
-        let $element = $(element);
-        AirLog.trackInfo.push({
-            'lat': $element.attr('lat'),
-            'lon': $element.attr('lon'),
-            'altitude': $element.find('ele').text(),
-            'time': $element.find('time').text(),
-            'sinkrate': $element.find('gpsalt').text(),
-            'speed': $element.find('speed').text()
-        });
+    AirLog.trackInfo = AirLog.csvToArray(data);
 
+    AirLog.trackInfo.forEach(function (item) {
         AirLog.trackPoints.push({
-            'x': $element.attr('lon'),
-            'y': $element.attr('lat')
+            'x': item.lon,
+            'y': item.lat
         });
     });
+
+    console.log(AirLog.trackInfo);
+
+    // GPX Files
+    // data = data.replaceAll("gpxtpx:", "");
+    // var doc = $.parseXML(data);
+    // $trackPoints = $(doc).find("trkpt");
+    // AirLog.trackInfo = Array();
+    // AirLog.trackPoints = Array();
+    // AirLog.timePos = 0;
+
+    // $trackPoints.each(function (index, element) {
+    //     let $element = $(element);
+    //     AirLog.trackInfo.push({
+    //         'lat': $element.attr('lat'),
+    //         'lon': $element.attr('lon'),
+    //         'altitude': $element.find('ele').text(),
+    //         'time': $element.find('time').text(),
+    //         'sinkrate': $element.find('gpsalt').text(),
+    //         'speed': $element.find('speed').text()
+    //     });
+
+    //     AirLog.trackPoints.push({
+    //         'x': $element.attr('lon'),
+    //         'y': $element.attr('lat')
+    //     });
+    // });
 }
 
 /**
@@ -224,7 +283,7 @@ AirLog.drawTrackLine = function (data) {
     // Graph Functions
     AirLog.graphs.forEach(function (item, index) {
         var result = AirLog.getGraphPoints(item.xAxis, item.yAxis);
-        AirLog.initAxis(item.svg, result.maxYValue, item.label);
+        AirLog.initAxis(item.svg, result.maxYValue, item.label, item.xUnit, item.yUnit);
 
         console.log(result.maxYValue);
         AirLog.graphs[index].points = result.points;
@@ -297,7 +356,9 @@ AirLog.initGraph = function (selector) {
                 .style("z-index", 2),
             xAxis: $this.data('x'),
             yAxis: $this.data('y'),
-            label: $this.data('label')
+            label: $this.data('label'),
+            xUnit: $this.data('x-unit'),
+            yUnit: $this.data('y-unit')
         });
     });
 }
@@ -507,8 +568,10 @@ AirLog.drawText = function (svg, point, text, align = 'start', valign = 'hanging
  * @param {Object} svg
  * @param {Number} maxYValue
  * @param {String} label
+ * @param {String} xUnit
+ * @param {String} yUnit
  */
-AirLog.initAxis = function (svg, maxYValue, label) {
+AirLog.initAxis = function (svg, maxYValue, label, xUnit = '', yUnit = '') {
     // Base Axis
     AirLog.drawLine(svg, [{ x: 0, y: 100 }, { x: 100, y: 100 }]);
     AirLog.drawLine(svg, [{ x: 0, y: 0 }, { x: 0, y: 100 }]);
@@ -520,7 +583,7 @@ AirLog.initAxis = function (svg, maxYValue, label) {
         yDelta = -1,
         temp = Math.floor(maxYValue / Math.pow(10, Number.parseInt(Math.log10(maxYValue).toString()) - 1));
 
-    // X Axis
+    // Y Axis
     deltas.forEach(function (item) {
         if (-1 == xDelta && item > (temp / 8)) {
             xDelta = item;
@@ -530,10 +593,15 @@ AirLog.initAxis = function (svg, maxYValue, label) {
     for (var i = 0; i <= temp; i = i + xDelta) {
         var yPos = i * 100 / temp;
         AirLog.drawLine(svg, [{ x: 0, y: yPos }, { x: 100, y: yPos }], '#ddd');
-        AirLog.drawText(svg, { x: -1, y: yPos }, (Math.floor(temp / xDelta) * xDelta - i) * Math.pow(10, Number.parseInt(Math.log10(maxYValue).toString()) - 1), 'end', 'middle');
+
+        var text = (Math.floor(temp / xDelta) * xDelta - i) * Math.pow(10, Number.parseInt(Math.log10(maxYValue).toString()) - 1)
+        if (i + xDelta > temp) {
+            text += '(' + yUnit + ')';
+        }
+        AirLog.drawText(svg, { x: -1, y: yPos }, text, 'end', 'middle');
     }
 
-    // Y Axis
+    // X Axis
     temp = Math.floor(AirLog.timeDelta / Math.pow(10, Number.parseInt(Math.log10(AirLog.timeDelta).toString()) - 1));
 
     deltas.forEach(function (item) {
@@ -545,7 +613,12 @@ AirLog.initAxis = function (svg, maxYValue, label) {
     for (var i = 0; i <= temp; i = i + yDelta) {
         var xPos = i * 100 / temp;
         AirLog.drawLine(svg, [{ x: xPos, y: 0 }, { x: xPos, y: 100 }], '#ddd');
-        AirLog.drawText(svg, { x: xPos, y: 105 }, i * Math.pow(10, Number.parseInt(Math.log10(AirLog.timeDelta).toString()) - 1) + 'm', 'middle', 'hanging');
+
+        var text = i * Math.pow(10, Number.parseInt(Math.log10(AirLog.timeDelta).toString()) - 1);
+        if (i == 0) {
+            text += '(' + xUnit + ')';
+        }
+        AirLog.drawText(svg, { x: xPos, y: 105 }, text, 'middle', 'hanging');
     }
 
     // Showing Label

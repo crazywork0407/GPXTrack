@@ -77,9 +77,9 @@
                 </div>
             </div>
             <div class="col-md-6 col-sm-12 mt-4" style="height: 70vh;">
-                <figure class="track-graph" data-x="time" data-y="altitude" data-label="Altitude"></figure>
-                <figure class="track-graph" data-x="time" data-y="speed" data-label="Speed"></figure>
-                <figure class="track-graph" data-x="time" data-y="skinrate" data-label="Altitude"></figure>
+                <figure class="track-graph" data-x="time" data-y="alt" data-x-unit="min" data-y-unit="m" data-label="Altitude"></figure>
+                <figure class="track-graph" data-x="time" data-y="speed" data-x-unit="min" data-y-unit="m/s" data-label="Speed"></figure>
+                <figure class="track-graph" data-x="time" data-y="sink" data-x-unit="min" data-y-unit="degree" data-label="Sinkrate"></figure>
             </div>
         </div>
         <div class="card" style="margin: 25px 0px;">
@@ -273,16 +273,20 @@
             var xhttp = new XMLHttpRequest();
             var data = new FormData()
 
+            // Convert to CSV files
+
             data.append("logFileUrl", url)
+
+            console.log(url);
 
             xhttp.onreadystatechange = function () {
                 if (this.readyState == 4 && this.status == 200) {
                     var myblob = new Blob([this.response], {
-                        type: 'application/gpx+xml'
+                        type: 'text/csv'
                     });
 
                     var file = new File([myblob], filename, {
-                        type: 'application/gpx+xml',
+                        type: 'text/csv',
                     });
 
                     var dt = new DataTransfer();
@@ -360,7 +364,7 @@
                     url: serverUrl + "dashboard/getDownloadUrl",
                     data: { 
                         uid: uid, 
-                        filename: filename 
+                        filename: filename.replace('.gpx', '.csv')
                     }
                 }).then((response) => {
                     var logFileUrl = response.url;

@@ -11,7 +11,7 @@ const tempUId = "0XG1ofhpLzWojIajLdxszlCMrcy2";
 
 const verifyUid = (req, res) => {
     const { uid } = req.body;
-    
+
     if (uid) {
         res.send({ status: true });
     } else {
@@ -55,7 +55,7 @@ const getLogbook = (req, res) => {
         var logbookList = uidResult.logbook;
         var logbookKeys = Object.keys(logbookList).reverse();
         for (let index = 0; index < logbookKeys.length; index++) {
-            const key = logbookKeys[index];  
+            const key = logbookKeys[index];
             if (logbookList[key].logFile.length && logbookList[key].logFile != " ") {
                 logbookList[key].logFile = logbookList[key].logFile + '.gpx';
             } else {
@@ -112,6 +112,10 @@ const getLogFile = async (req, res) => {
 const getDownloadUrl = async (req, res) => {
     var { uid, filename } = req.body;
     uid = uid ? uid : tempUId;
+
+    // Convert file name to *.csv file.
+    filename = filename.replace('.gpx', '.csv');
+
     var downloadUrl = await getDownloadURL(sref(storage, uid + "/" + filename));
     res.send({ url: downloadUrl });
 }
@@ -141,39 +145,39 @@ const saveLogData = async (req, res) => {
     //             } else {
     //                 console.log("result 2")
     //                 delete newLogData["uid"];
-                    dSet(logNrRef, newLogData)
-                        .then(() => {
-                            console.log("Data saved successfully!");
-                            const uidRef = dref(database, uid);
-                            onValue(uidRef, async (result) => {
-                                var uidResult = result.val();
-                            
-                                var logbookList = uidResult.logbook;
-                                var logbookKeys = Object.keys(logbookList).reverse();
-                                for (let index = 0; index < logbookKeys.length; index++) {
-                                    const key = logbookKeys[index];  
-                                    if (logbookList[key].logFile.length && logbookList[key].logFile.substring(0, 1) != " ") {
-                                        logbookList[key].logFile = logbookList[key].logFile + '.gpx';
-                                    } else {
-                                        logbookList[key].logFile = " ";
-                                    }
-                                    logbookList[key].logPlace = (logbookList[key].logPlace ? logbookList[key].logPlace : "");
-                                    logbookList[key].logAirc = (logbookList[key].logAirc ? logbookList[key].logAirc : "");
-                                    logbookList[key].logDesc = (logbookList[key].logDesc ? logbookList[key].logDesc : "");
-                                }
-                            
-                                res.send({
-                                    status: true,
-                                    keys: logbookKeys,
-                                    data: logbookList
-                                });
-                            }, {
-                                onlyOnce: true
-                            });
-                        })
-                        .catch(() => {
-                            res.send({ status: false });
-                        })
+    dSet(logNrRef, newLogData)
+        .then(() => {
+            console.log("Data saved successfully!");
+            const uidRef = dref(database, uid);
+            onValue(uidRef, async (result) => {
+                var uidResult = result.val();
+
+                var logbookList = uidResult.logbook;
+                var logbookKeys = Object.keys(logbookList).reverse();
+                for (let index = 0; index < logbookKeys.length; index++) {
+                    const key = logbookKeys[index];
+                    if (logbookList[key].logFile.length && logbookList[key].logFile.substring(0, 1) != " ") {
+                        logbookList[key].logFile = logbookList[key].logFile + '.gpx';
+                    } else {
+                        logbookList[key].logFile = " ";
+                    }
+                    logbookList[key].logPlace = (logbookList[key].logPlace ? logbookList[key].logPlace : "");
+                    logbookList[key].logAirc = (logbookList[key].logAirc ? logbookList[key].logAirc : "");
+                    logbookList[key].logDesc = (logbookList[key].logDesc ? logbookList[key].logDesc : "");
+                }
+
+                res.send({
+                    status: true,
+                    keys: logbookKeys,
+                    data: logbookList
+                });
+            }, {
+                onlyOnce: true
+            });
+        })
+        .catch(() => {
+            res.send({ status: false });
+        })
     //             }
     //         })
     //     }
