@@ -25,8 +25,12 @@
     position: relative;
     height: calc((100% - 40px) / 3);
     width: 100%;
-    border: 1px solid #e1e1e1;
 }
 .track-graph + .track-graph {
     margin-top: 20px !important;
+}
+.graph-title {
+    font-size: 60px;
+    font-weight: 900;
+    fill: #ccc;
 }

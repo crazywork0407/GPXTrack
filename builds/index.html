@@ -64,14 +64,22 @@
                     <div class="range-slider-wrapper mb-2">
                         <input type="range" min="0" max="100" step="0.1" value="0" class="range-slider">
                     </div>
-                    <button class="btn btn-primary btn-play mr-2" id="play">Play</button>
-                    <button class="btn btn-secondary btn-stop" id="stop">Stop</button>
+                    <div class="row">
+                        <div class="col-6 buttons-wrapper">
+                            <button class="btn btn-primary btn-play mr-2" id="play">Play</button>
+                            <button class="btn btn-secondary btn-stop" id="stop">Stop</button>
+                        </div>
+                        <div class="col-6 speed-control text-right">
+                            <label class="mr-1">Speed:</label>&nbsp;✕&nbsp;
+                            <input type="number" value="1" id="speed" class="speed-input" style="width: 40px;">
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="col-md-6 col-sm-12 mt-4" style="height: 70vh;">
-                <figure class="track-graph" data-x="time" data-y="altitude" data-x-label="Time" data-y-label="Altitude"></figure>
-                <figure class="track-graph" data-x="time" data-y="speed" data-x-label="Time" data-y-label="Speed"></figure>
-                <figure class="track-graph" data-x="time" data-y="skinrate" data-x-label="Time" data-y-label="Altitude"></figure>
+                <figure class="track-graph" data-x="time" data-y="altitude" data-label="Altitude"></figure>
+                <figure class="track-graph" data-x="time" data-y="speed" data-label="Speed"></figure>
+                <figure class="track-graph" data-x="time" data-y="skinrate" data-label="Altitude"></figure>
             </div>
         </div>
         <div class="card" style="margin: 25px 0px;">
