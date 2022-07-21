@@ -73,7 +73,6 @@ AirLog.timerID = false;
  * @since 1.0.0
  */
 AirLog.project = function (d) {
-    console.log(d);
     return AirLog.map.project(new mapboxgl.LngLat(d.x, d.y));
 }
 
@@ -283,7 +282,7 @@ AirLog.drawTrackLine = function (data) {
     // Graph Functions
     AirLog.graphs.forEach(function (item, index) {
         var result = AirLog.getGraphPoints(item.xAxis, item.yAxis);
-        AirLog.initAxis(item.svg, result.maxYValue, item.label, item.xUnit, item.yUnit);
+        AirLog.initAxis(item.svg, result.maxYValue, result.minYValue, item.label, item.xUnit, item.yUnit);
 
         console.log(result.maxYValue);
         AirLog.graphs[index].points = result.points;
@@ -341,7 +340,7 @@ AirLog.initGraph = function (selector) {
 
     AirLog.$graphs = $selector;
 
-    AirLog.xLength = $selector.outerWidth() - 50;
+    AirLog.xLength = $selector.outerWidth() - 0;
     AirLog.yLength = $selector.outerHeight() - 40;
 
     $selector.each(function () {
@@ -376,11 +375,16 @@ AirLog.initGraph = function (selector) {
 AirLog.getGraphPoints = function (x = 'time', y = 'altitude') {
     var result = Array(),
         index = 0,
-        maxYValue = 0;
+        maxYValue = 0,
+        minYValue = 0;
 
     AirLog.trackInfo.forEach(function (item) {
         if (maxYValue < parseFloat(item[y])) {
             maxYValue = parseFloat(item[y]);
+        }
+
+        if (minYValue > parseFloat(item[y])) {
+            minYValue = parseFloat(item[y]);
         }
 
         result.push({
@@ -395,13 +399,19 @@ AirLog.getGraphPoints = function (x = 'time', y = 'altitude') {
     var count = Number.parseInt(Math.log10(maxYValue).toString());
     maxYValue = (Math.floor(maxYValue / Math.pow(10, count)) + 1) * Math.pow(10, count);
 
+    if (minYValue < 0) {
+        count = Number.parseInt(Math.log10(Math.abs(minYValue)).toString());
+        minYValue = -(Math.floor(Math.abs(minYValue) / Math.pow(10, count)) + 1) * Math.pow(10, count);
+    }
+
     return {
         points: result.map(function (item) {
             item.x = item.x * 100 / result.length;
-            item.y = 100 - (item.y * 100 / maxYValue);
+            item.y = 100 - ((item.y - minYValue) * 100 / (maxYValue - minYValue));
             return item;
         }),
-        maxYValue: maxYValue
+        maxYValue: maxYValue,
+        minYValue: minYValue
     };
 }
 
@@ -458,7 +468,7 @@ AirLog.drawGraphPos = function (svg, point) {
  * @since 1.0.0
  */
 AirLog.renderGraph = function () {
-    AirLog.xLength = AirLog.$graphs.outerWidth() - 50;
+    AirLog.xLength = AirLog.$graphs.outerWidth() - 0;
     AirLog.yLength = AirLog.$graphs.outerHeight() - 40;
 
     AirLog.graphs.forEach(function (item) {
@@ -475,7 +485,7 @@ AirLog.renderGraph = function () {
  */
 AirLog.renderGraphPos = function () {
     var project = function (d) {
-        AirLog.xLength = AirLog.$graphs.outerWidth() - 50;
+        AirLog.xLength = AirLog.$graphs.outerWidth() - 0;
         AirLog.yLength = AirLog.$graphs.outerHeight() - 40;
 
         return {
@@ -502,7 +512,7 @@ AirLog.renderGraphPos = function () {
  */
 AirLog.drawLine = function (svg, points, color = '#999') {
     var project = function (d) {
-        AirLog.xLength = AirLog.$graphs.outerWidth() - 50;
+        AirLog.xLength = AirLog.$graphs.outerWidth() - 0;
         AirLog.yLength = AirLog.$graphs.outerHeight() - 40;
 
         return {
@@ -536,7 +546,7 @@ AirLog.drawLine = function (svg, points, color = '#999') {
  */
 AirLog.drawText = function (svg, point, text, align = 'start', valign = 'hanging', className = '') {
     var project = function (d) {
-        AirLog.xLength = AirLog.$graphs.outerWidth() - 50;
+        AirLog.xLength = AirLog.$graphs.outerWidth() - 0;
         AirLog.yLength = AirLog.$graphs.outerHeight() - 40;
 
         return {
@@ -567,11 +577,12 @@ AirLog.drawText = function (svg, point, text, align = 'start', valign = 'hanging
  * 
  * @param {Object} svg
  * @param {Number} maxYValue
+ * @param {Number} minYValue
  * @param {String} label
  * @param {String} xUnit
  * @param {String} yUnit
  */
-AirLog.initAxis = function (svg, maxYValue, label, xUnit = '', yUnit = '') {
+AirLog.initAxis = function (svg, maxYValue, minYValue, label, xUnit = '', yUnit = '') {
     // Base Axis
     AirLog.drawLine(svg, [{ x: 0, y: 100 }, { x: 100, y: 100 }]);
     AirLog.drawLine(svg, [{ x: 0, y: 0 }, { x: 0, y: 100 }]);
@@ -581,21 +592,37 @@ AirLog.initAxis = function (svg, maxYValue, label, xUnit = '', yUnit = '') {
     var deltas = [1, 2, 4, 5, 10],
         xDelta = -1,
         yDelta = -1,
-        temp = Math.floor(maxYValue / Math.pow(10, Number.parseInt(Math.log10(maxYValue).toString()) - 1));
+        temp = Math.floor((maxYValue - minYValue) / Math.pow(10, Number.parseInt(Math.log10(maxYValue - minYValue).toString()) - 1));
 
     // Y Axis
     deltas.forEach(function (item) {
-        if (-1 == xDelta && item > (temp / 8)) {
+        if (-1 == xDelta && item > ((temp) / 8)) {
             xDelta = item;
         }
     });
 
-    for (var i = 0; i <= temp; i = i + xDelta) {
-        var yPos = i * 100 / temp;
+    xDelta *= Math.pow(10, Number.parseInt(Math.log10(maxYValue - minYValue).toString()) - 1);
+
+    console.log(maxYValue);
+    console.log(xDelta);
+
+    for (var i = 0; i <= maxYValue; i = i + xDelta) {
+        var yPos = 100 - (i - minYValue) * 100 / (maxYValue - minYValue);
         AirLog.drawLine(svg, [{ x: 0, y: yPos }, { x: 100, y: yPos }], '#ddd');
 
-        var text = (Math.floor(temp / xDelta) * xDelta - i) * Math.pow(10, Number.parseInt(Math.log10(maxYValue).toString()) - 1)
-        if (i + xDelta > temp) {
+        var text = i;
+        if (i == 0) {
+            text += '(' + yUnit + ')';
+        }
+        AirLog.drawText(svg, { x: -1, y: yPos }, text, 'end', 'middle');
+    }
+
+    for (var i = -xDelta; i > minYValue; i = i - xDelta) {
+        var yPos = 100 - (i - minYValue) * 100 / (maxYValue - minYValue);
+        AirLog.drawLine(svg, [{ x: 0, y: yPos }, { x: 100, y: yPos }], '#ddd');
+
+        var text = i;
+        if (i == 0) {
             text += '(' + yUnit + ')';
         }
         AirLog.drawText(svg, { x: -1, y: yPos }, text, 'end', 'middle');
@@ -670,7 +697,7 @@ AirLog.initRangeSlider = function (selector) {
     $('body').on('input', selector, function (e) {
         var $this = $(this);
 
-        AirLog.timePos = Number($this.val() * AirLog.trackPoints.length / 100).toFixed(0);
+        AirLog.timePos = Math.floor(Number($this.val() * AirLog.trackPoints.length / 100));
         AirLog.pos = Array(AirLog.trackPoints[AirLog.timePos]);
         AirLog.dot.data(AirLog.pos);
         AirLog.render();
