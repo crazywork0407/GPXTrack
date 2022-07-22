@@ -10,13 +10,13 @@
 .track-info {
     position: absolute;
     left: 30px;
-    top: 35px;
+    top: 30px;
     margin: 0;
     padding: 10px;
     min-width: 120px;
     list-style: none;
-    font-size: 10px;
-    color: #222;
+    font-size: 16px;
+    color: rgb(0, 0, 0);
     background-color: rgba(240,240,240,.6);
 }
 
@@ -25,12 +25,13 @@
     position: relative;
     height: calc((100% - 40px) / 3);
     width: 100%;
+    background-color: #fff;
 }
 .track-graph + .track-graph {
     margin-top: 20px !important;
 }
 .graph-title {
-    font-size: 60px;
-    font-weight: 900;
-    fill: #ccc;
+    font-size: 30px;
+    font-weight: 500;
+    fill: #999;
 }

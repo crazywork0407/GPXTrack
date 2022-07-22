@@ -49,15 +49,17 @@
        <!--  <h1 class="page-title">Track View</h1> -->
         <div class="row mb-4">
             <div class="col-md-6 col-sm-12 pt-4">
-                <div class="map-wrapper" style="height: 70vh;">
+                <div class="map-wrapper" style="height: 60vH;">
                     <div class="mapbox-gl-map" id="log-map"></div>
                     <ul class="track-info">
+                    <!--  
                         <li><label>Lat:</label><span class="lat"></span></li>
                         <li><label>Lon:</label><span class="lon"></span></li>
-                        <li><label>Alt:</label><span class="alt"></span>m</li>
-                        <li><label>Speed:</label><span class="speed"></span>m/s</li>
-                        <li><label>Sink:</label><span class="sink"></span>m/s</li>
-                        <li><label>Time:</label><span class="time"></span></li>
+                    -->
+                    <li><label>Alt: &nbsp</label><span class="alt"></span> <span class="unit">m</span></li>
+                    <li><label>H-Spd: &nbsp</label><span class="speed"></span> <span class="unit unit-mph">m/s</span></li>
+                    <li><label>V-Spd: &nbsp</label><span class="sink"></span> <span class="unit">m/s</span></li>
+                    <li><label>Course: &nbsp</label><span class="heading"></span> &#xb0;</li>
                     </ul>
                 </div>
                 <div class="play-control mt-4">
@@ -71,37 +73,38 @@
                         </div>
                         <div class="col-6 speed-control text-right">
                             <label class="mr-1">Speed:</label>&nbsp;✕&nbsp;
-                            <input type="number" value="1" id="speed" class="speed-input" style="width: 40px;">
+                            <input type="number" value="10" id="speed" class="speed-input" style="width: 40px;">
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="col-md-6 col-sm-12 mt-4" style="height: 70vh;">
+            <div class="col-md-6 col-sm-12 mt-4" style="height: 60vh;">
                 <figure class="track-graph" data-x="time" data-y="alt" data-x-unit="min" data-y-unit="m" data-label="Altitude"></figure>
                 <figure class="track-graph" data-x="time" data-y="speed" data-x-unit="min" data-y-unit="m/s" data-label="Speed"></figure>
-                <figure class="track-graph" data-x="time" data-y="sink" data-x-unit="min" data-y-unit="deg" data-label="Sinkrate"></figure>
+                <figure class="track-graph" data-x="time" data-y="sink" data-x-unit="min" data-y-unit="m/s" data-label="Sinkrate"></figure>
             </div>
         </div>
         <div class="card" style="margin: 25px 0px;">
             <div class="card-header panel-primary" >
-            LOGBOOK
-            <span id="logbook-username" style="font-size: 18px; margin-left: 150px; float:right; color:#fff; display: none;"></span>
+            <b>LOGBOOK</b>
+            <span id="logbook-username" style="font-size: 24px; margin-left: 150px; float:right; color:#fff; display: none;"></span>
             </div>
 
             <div class="table-responsive" style="max-height: 600px; overflow-y: auto; display: inline-block;">
                 <table class="table table-striped">
                     <thead>
                        <tr>
-                            <th class="hdr" scope="col">JUMP#</th> 
-                            <th class="hdr" scope="col">DATE</th> 
-                            <th class="hdr" scope="col">TIME</th> 
-                            <th class="hdr" scope="col">PLACE</th> 
-                            <th class="hdr" scope="col">AIRCRAFT</th> 
-                            <th class="hdr" scope="col">MAX ALT</th> 
-                            <th class="hdr" scope="col">MAX SPEED</th> 
-                            <th class="hdr" scope="col">JUMP DESCRIPTION</th> 
-                            <th class="hdr" scope="col">TRACK</th> 
-                            <th class="hdr" scope="col">ACTION</th> 
+                        <th class="hdr" scope="col" style="width: 5%">JUMP#</th> 
+                        <th class="hdr" scope="col" style="width: 7%">DATE</th> 
+                        <th class="hdr" scope="col" style="width: 5%">TIME</th> 
+                        <th class="hdr" scope="col" style="width: 10%">PLACE</th> 
+                        <th class="hdr" scope="col" style="width: 5%">AIRCRAFT</th> 
+                        <th class="hdr" scope="col" style="width: 7%">MAX ALT</th> 
+                        <th class="hdr" scope="col" style="width: 7%">MAX SPD</th>
+                        <th class="hdr" scope="col" style="width: 5%">DISCIPLINE</th> 
+                        <th class="hdr" scope="col">DESCRIPTION</th> 
+                        <th class="hdr" scope="col" style="width: 10%">TRACK</th> 
+                        <th class="hdr" scope="col" style="width: 10%">ACTION</th> 
                             </tr>                          
                     </thead>
                     <tbody id="logbook"></tbody>
@@ -118,7 +121,7 @@
             </div>
             <div class="col-md-4 col-sm-12">
                 <div class="card winds-aloft">
-                    <div id="winds-title" class="card-header">wait...</div>
+                    <div id="winds-title" class="card-header">fetching data...</div>
                     <div class="card-body">
                         <div class="circle">
                             <div class="circle-list">
@@ -202,8 +205,25 @@
                             <input type="text" class="form-control" id="log-number" disabled>
                         </div>
                         <div class="form-group">
+                            <label for="log-place" class="col-form-label">Log Place:</label>
+                            <textarea class="form-control" id="log-place"></textarea>
+                        </div>
+                        <div class="form-group">
                             <label for="log-aircraft" class="col-form-label">Aircraft:</label>
                             <textarea class="form-control" id="log-aircraft"></textarea>
+                        </div>
+                        <div class="form-group">
+                          <label for="log-type" class="col-form-label">Discipline:</label>
+                            <select class="form-select" id="log-type">
+                                <option selected>Discipline</option>
+                                <option value="CRW">CRW</option>
+                                <option value="FF">FF</option>
+                                <option value="RW">RW</option>
+                                <option value="Wing">Wing</option>
+                                <option value="CP">CP</option>
+                                <option value="Base">Base</option>
+                              </select>
+
                         </div>
                         <div class="form-group">
                             <label for="log-desc" class="col-form-label">Jump Description:</label>
@@ -355,7 +375,9 @@
             if (type == 'edit') {
                 //Init Modal
                 document.getElementById("log-number").value = logbookList[filename].logNr;
+                document.getElementById("log-place").value = logbookList[filename].logPlace;
                 document.getElementById("log-aircraft").value = logbookList[filename].logAirc;
+                document.getElementById("log-type").value = logbookList[filename].logType;
                 document.getElementById("log-desc").value = logbookList[filename].logDesc;
                 $('#logModal').modal('show');
             } else {
@@ -405,8 +427,8 @@
 
                         if (metric) { document.getElementById('lastjump-altitude').innerHTML = logbookList[key].logAlt + ' m';}
                         else { document.getElementById('lastjump-altitude').innerHTML = parseInt(logbookList[key].logAlt*3.28) + ' ft';}
-                        document.getElementById('lastjump-date').innerHTML = logbookList[key].logDate + ', ' + logbookList[key].logTime;
-                        document.getElementById('lastjump-place').innerHTML = logbookList[key].logPlace;  // <td>${logbookList[key].logAlt}</td>
+                        document.getElementById('lastjump-date').innerHTML = logbookList[key].logDate + ' @ ' + logbookList[key].logTime.substring(0,5);
+                        document.getElementById('lastjump-place').innerHTML = logbookList[key].logPlace; 
                        
            
                         logbookItem = `<tr class="table-active">`;
@@ -419,11 +441,12 @@
                     logbookItem += `
                                             <th scope="row">${logbookList[key].logNr}</th>
                                             <td>${logbookList[key].logDate}</td>
-                                            <td>${logbookList[key].logTime}</td>
+                                            <td>${logbookList[key].logTime.substring(0,5)}</td>
                                             <td>${logbookList[key].logPlace}</td>
                                             <td>${logbookList[key].logAirc}</td>
                                             <td>${logAlt}</td> 
                                             <td>${logbookList[key].logSpd}</td>
+                                            <td>${logbookList[key].logType}</td>
                                             <td>${logbookList[key].logDesc}</td>
                                             <td>${logbookList[key].logFile}</td>
                                             <td class="table-button">` +
@@ -466,7 +489,7 @@
 
                 if (uid) {
                     document.getElementById('navbar-username').style.display = 'block';
-                    document.getElementById('navbar-username').innerHTML = response.callsign ? response.callsign : "";
+                    document.getElementById('navbar-username').innerHTML = response.callsign // ? response.callsign : "";
                     /////
                     document.getElementById('logbook-username').style.display = 'block';
                     document.getElementById('logbook-username').innerHTML = response.username  + "&nbsp;&nbsp;-&nbsp;&nbsp;" + response.license;
@@ -502,7 +525,7 @@
                     document.getElementById('winds-slider').style.display = 'block';
                     new Slider("#winds-slider", {
                         min: 0,
-                        max: altSI.length - 23,  // Stop alt values at 5400m
+                        max: altSI.length - 25,  // Stop alt values at 4800m
                         step: 1,
                         value: 0,
                         tooltip: 'always',
@@ -547,15 +570,20 @@
 
         function saveLogItem() {
             var logNr = document.getElementById("log-number").value;
+            var logPlace = document.getElementById("log-place").value;
             var logAirc = document.getElementById("log-aircraft").value;
+            var logType = document.getElementById("log-type").value;
             var logDesc = document.getElementById("log-desc").value;
-            if (!logNr || !logbookList[logNr] || !logAirc || !logDesc) {
+            if (!logNr || !logbookList[logNr] || !logAirc  || !logType ) 
+            {
                 alert("Please enter all log detail info!");
             }
 
             var newLogData = logbookList[logNr];
             newLogData.uid = localStorage.getItem('uid');
             newLogData.logAirc = logAirc;
+            newLogData.logPlace = logPlace;
+            newLogData.logType = logType;
             newLogData.logDesc = logDesc;
             if (newLogData.logFile != " ") {
                 newLogData.logFile = newLogData.logFile.slice(0, newLogData.logFile.length - 4);
@@ -586,11 +614,12 @@
                         logbookItem += `
                                                 <th scope="row">${logbookList[key].logNr}</th>
                                                 <td>${logbookList[key].logDate}</td>
-                                                <td>${logbookList[key].logTime}</td>
+                                                <td>${logbookList[key].logTime.substring(0,5)}</td>
                                                 <td>${logbookList[key].logPlace}</td>
                                                 <td>${logbookList[key].logAirc}</td>
                                                 <td>${logbookList[key].logAlt}</td>
                                                 <td>${logbookList[key].logSpd}</td>
+                                                <td>${logbookList[key].logType}</td>
                                                 <td>${logbookList[key].logDesc}</td>
                                                 <td>${logbookList[key].logFile}</td>
                                                 <td class="table-button">` +

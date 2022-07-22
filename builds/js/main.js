@@ -64,7 +64,7 @@ AirLog.yLength = 150;
  * @since 1.0.0
  */
 AirLog.timePos = 0;
-AirLog.timeSpeed = 1;
+AirLog.timeSpeed = 10;
 AirLog.timerID = false;
 
 /**
@@ -159,6 +159,19 @@ AirLog.getTrackInfo = function (data) {
 
     AirLog.trackInfo = AirLog.csvToArray(data);
 
+    // Unit Convert
+    if (!metric) {
+        AirLog.trackInfo.map(function (item) {
+            item.alt = (item.alt * 3.28).toFixed(2);
+            item.speed = (item.speed * 2.237).toFixed(2);
+            item.sink = (item.sink * 3.28).toFixed(2);
+
+            return item;
+        })
+
+        AirLog.updateUnit();
+    }
+
     AirLog.trackInfo.forEach(function (item) {
         AirLog.trackPoints.push({
             'x': item.lon,
@@ -167,6 +180,9 @@ AirLog.getTrackInfo = function (data) {
     });
 
     console.log(AirLog.trackInfo);
+
+    // Clear Graph Axis.
+    $(window).trigger('clear');
 
     // GPX Files
     // data = data.replaceAll("gpxtpx:", "");
@@ -205,7 +221,7 @@ AirLog.initMapBox = function () {
         container: "log-map",
         style: "mapbox://styles/mapbox/light-v10",
         center: [13.405, 52.52],
-        zoom: 12
+        zoom: 14
     });
 
     AirLog.canvasContainer = AirLog.map.getCanvasContainer();
@@ -254,8 +270,8 @@ AirLog.drawTrackLine = function (data) {
         .datum(AirLog.trackPoints)
         .attr("class", "track-path")
         .attr("d", AirLog.pathGenerator)
-        .attr("stroke", "#999")
-        .attr("stroke-width", 2)
+        .attr("stroke", "#3D5A80")
+        .attr("stroke-width", 3)
         .attr("fill", "none");
 
     AirLog.pos = Array(AirLog.trackPoints[0]);
@@ -268,7 +284,7 @@ AirLog.drawTrackLine = function (data) {
         .data(AirLog.pos)
         .enter()
         .append("circle")
-        .attr("r", 5)
+        .attr("r", 8)
         .style("fill", "#ff0000");
 
     AirLog.map.flyTo({ center: [AirLog.trackPoints[0].x, AirLog.trackPoints[0].y] });
@@ -282,6 +298,15 @@ AirLog.drawTrackLine = function (data) {
     // Graph Functions
     AirLog.graphs.forEach(function (item, index) {
         var result = AirLog.getGraphPoints(item.xAxis, item.yAxis);
+        if (!metric) {
+            if (item.yAxis === 'alt') {
+                item.yUnit = 'ft';
+            } else if (item.yAxis === 'speed') {
+                item.yUnit = 'mph';
+            } else if (item.yAxis === 'sink') {
+                item.yUnit = 'ft/s';
+            }
+        }
         AirLog.initAxis(item.svg, result.maxYValue, result.minYValue, item.label, item.xUnit, item.yUnit);
 
         console.log(result.maxYValue);
@@ -313,8 +338,11 @@ AirLog.timerHandle = function () {
 
     AirLog.dot.data(AirLog.pos);
 
-    if (false != AirLog.timerID && AirLog.trackPoints.length == AirLog.timePos) {
-        clearInterval(AirLog.timerID);
+    if (false != AirLog.timerID && AirLog.trackPoints.length <= AirLog.timePos) {
+        var tempId = AirLog.timerID;
+        AirLog.timerID = false;
+        AirLog.timePos = 0;
+        clearInterval(tempId);
     }
 
     AirLog.render();
@@ -328,6 +356,9 @@ AirLog.timerHandle = function () {
     AirLog.showInformation();
 
     AirLog.timePos += AirLog.timeSpeed;
+    if (AirLog.trackPoints.length <= AirLog.timePos && (AirLog.timePos - AirLog.timeSpeed) < (AirLog.trackPoints.length - 1)) {
+        AirLog.timePos = AirLog.trackPoints.length - 1;
+    }
 }
 
 /**
@@ -340,7 +371,7 @@ AirLog.initGraph = function (selector) {
 
     AirLog.$graphs = $selector;
 
-    AirLog.xLength = $selector.outerWidth() - 0;
+    AirLog.xLength = $selector.outerWidth() - 60;
     AirLog.yLength = $selector.outerHeight() - 40;
 
     $selector.each(function () {
@@ -421,7 +452,7 @@ AirLog.getGraphPoints = function (x = 'time', y = 'altitude') {
  * @since 1.0.0
  * 
  * @param {Object} graphSVG - SVG Object for Graph
- * @param {Array} points - Point Arrat
+ * @param {Array} points - Point Array
  * 
  * @return Array - return graph points
  */
@@ -458,7 +489,7 @@ AirLog.drawGraphPos = function (svg, point) {
 
     return svg
         .append("circle")
-        .attr("r", 4)
+        .attr("r", 6)
         .style("fill", "#ff0000");
 }
 
@@ -468,7 +499,7 @@ AirLog.drawGraphPos = function (svg, point) {
  * @since 1.0.0
  */
 AirLog.renderGraph = function () {
-    AirLog.xLength = AirLog.$graphs.outerWidth() - 0;
+    AirLog.xLength = AirLog.$graphs.outerWidth() - 60;
     AirLog.yLength = AirLog.$graphs.outerHeight() - 40;
 
     AirLog.graphs.forEach(function (item) {
@@ -485,7 +516,7 @@ AirLog.renderGraph = function () {
  */
 AirLog.renderGraphPos = function () {
     var project = function (d) {
-        AirLog.xLength = AirLog.$graphs.outerWidth() - 0;
+        AirLog.xLength = AirLog.$graphs.outerWidth() - 60;
         AirLog.yLength = AirLog.$graphs.outerHeight() - 40;
 
         return {
@@ -512,7 +543,7 @@ AirLog.renderGraphPos = function () {
  */
 AirLog.drawLine = function (svg, points, color = '#999') {
     var project = function (d) {
-        AirLog.xLength = AirLog.$graphs.outerWidth() - 0;
+        AirLog.xLength = AirLog.$graphs.outerWidth() - 60;
         AirLog.yLength = AirLog.$graphs.outerHeight() - 40;
 
         return {
@@ -531,8 +562,14 @@ AirLog.drawLine = function (svg, points, color = '#999') {
             .attr("y2", project(points[1]).y)
     }).bind(line);
 
+    var clear = (function () {
+        line.remove();
+    }).bind(line);
+
     render();
     $(window).on('resize', render);
+
+    $(window).on('clear', clear);
 }
 
 /**
@@ -546,7 +583,7 @@ AirLog.drawLine = function (svg, points, color = '#999') {
  */
 AirLog.drawText = function (svg, point, text, align = 'start', valign = 'hanging', className = '') {
     var project = function (d) {
-        AirLog.xLength = AirLog.$graphs.outerWidth() - 0;
+        AirLog.xLength = AirLog.$graphs.outerWidth() - 60;
         AirLog.yLength = AirLog.$graphs.outerHeight() - 40;
 
         return {
@@ -566,8 +603,14 @@ AirLog.drawText = function (svg, point, text, align = 'start', valign = 'hanging
             .attr("y", project(point).y)
     }).bind(txt);
 
+    var clear = (function () {
+        txt.remove();
+    }).bind(txt);
+
     render();
     $(window).on('resize', render);
+
+    $(window).on('clear', clear);
 }
 
 /**
@@ -649,7 +692,7 @@ AirLog.initAxis = function (svg, maxYValue, minYValue, label, xUnit = '', yUnit 
     }
 
     // Showing Label
-    AirLog.drawText(svg, { x: 50, y: 50 }, label, 'middle', 'middle', 'graph-title');
+    AirLog.drawText(svg, { x: 50, y: 15 }, label, 'middle', 'middle', 'graph-title');
 }
 
 /**
@@ -715,6 +758,27 @@ AirLog.initSpeedControl = function (selector) {
         var $this = $(this);
 
         AirLog.timeSpeed = Number($this.val());
+    });
+};
+
+/**
+ * Update Unit
+ * 
+ * @since 1.0.0
+ */
+AirLog.updateUnit = function () {
+    $('.unit').each(function () {
+        var $this = $(this);
+
+        if ($this.html() == 'm') {
+            $this.html('ft');
+        } else if ($this.html() == 'm/s') {
+            if ($this.hasClass('unit-mph')) {
+                $this.html('mph');
+            } else {
+                $this.html('ft/s');
+            }
+        }
     });
 };
 
