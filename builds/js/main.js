@@ -334,16 +334,16 @@ AirLog.drawTrackLine = function (data) {
  * @since 1.0.0
  */
 AirLog.timerHandle = function () {
-    AirLog.pos = Array(AirLog.trackPoints[AirLog.timePos]);
-
-    AirLog.dot.data(AirLog.pos);
-
     if (false != AirLog.timerID && AirLog.trackPoints.length <= AirLog.timePos) {
         var tempId = AirLog.timerID;
         AirLog.timerID = false;
         AirLog.timePos = 0;
         clearInterval(tempId);
     }
+
+    AirLog.pos = Array(AirLog.trackPoints[AirLog.timePos]);
+
+    AirLog.dot.data(AirLog.pos);
 
     AirLog.render();
     AirLog.renderGraphPos();
@@ -355,10 +355,10 @@ AirLog.timerHandle = function () {
     // Showing Information
     AirLog.showInformation();
 
-    AirLog.timePos += AirLog.timeSpeed;
-    if (AirLog.trackPoints.length <= AirLog.timePos && (AirLog.timePos - AirLog.timeSpeed) < (AirLog.trackPoints.length - 1)) {
-        AirLog.timePos = AirLog.trackPoints.length - 1;
-    }
+    AirLog.timePos++;
+    // if (AirLog.trackPoints.length <= AirLog.timePos && (AirLog.timePos - AirLog.timeSpeed) < (AirLog.trackPoints.length - 1)) {
+    //     AirLog.timePos = AirLog.trackPoints.length - 1;
+    // }
 }
 
 /**
@@ -702,6 +702,10 @@ AirLog.showInformation = function () {
     var index = 0;
     Object.values(AirLog.trackInfo[AirLog.timePos]).forEach(function (value) {
         var keys = Object.keys(AirLog.trackInfo[AirLog.timePos]);
+        if (keys[index] == 'time') {
+            var date = new Date(value);
+            value = date.toLocaleTimeString();
+        }
         $('.track-info').find('.' + keys[index]).html(value);
         index++;
     });
@@ -715,7 +719,7 @@ AirLog.showInformation = function () {
 AirLog.initPlayButton = function (selector) {
     $('body').on('click', selector, function (e) {
         if (!AirLog.timerID) {
-            AirLog.timerID = setInterval(AirLog.timerHandle, 200);
+            AirLog.timerID = setInterval(AirLog.timerHandle, 1000 / AirLog.timeSpeed);
         }
     })
 }
@@ -745,6 +749,9 @@ AirLog.initRangeSlider = function (selector) {
         AirLog.dot.data(AirLog.pos);
         AirLog.render();
         AirLog.renderGraphPos();
+
+        // Showing Information
+        AirLog.showInformation();
     })
 };
 
@@ -758,6 +765,11 @@ AirLog.initSpeedControl = function (selector) {
         var $this = $(this);
 
         AirLog.timeSpeed = Number($this.val());
+
+        if (AirLog.timerID) {
+            clearInterval(AirLog.timerID);
+            AirLog.timerID = setInterval(AirLog.timerHandle, 1000 / AirLog.timeSpeed);
+        }
     });
 };
 
