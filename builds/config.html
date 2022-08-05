@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html>
-<!-- 28 june 22 - 16:30 ajanky-->
+<!-- 03 july 22 - 17:50 ajanky-->
 <head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>JumpLogger Configuration</title>
+    <title>JumpLogger Configuration </title>
 
     <!-- Optional CSS -->
     <link rel="stylesheet" href="./config/config.css">
@@ -23,7 +23,7 @@
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <a class="navbar-brand" href="#" > <img src="img/airlog75wh.png" alt="logo"/> </a>
-        <h2 class="titl">Airlog<wbr> configuration<wbr> page</h2> 
+        <h2 class="titl">jumpLogger<wbr> configuration<wbr> page</h2> 
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -35,11 +35,12 @@
                 <button type="button" class="btn btn-success mr-2">
                     <a style="color: #fff; text-decoration: none;" href="/">Home</a>
                 </button>
-                <button type="button" class="btn btn-success mr-2" onclick="updateConfig()">Update</button>
+                <button type="button" class="btn btn-success mr-2" onclick="updateConfig()">Save</button>
                 <button type="button" class="btn btn-danger" onclick="logout()">Logout</button>
             </form>
         </div>
     </nav>
+
     <div class="container">
         <p></p>
         <div class="card">
@@ -47,81 +48,99 @@
                 <h4 class="card-title">User</h4>
                 <form>
                     <div class="form-group row">
-                        <label class="col-sm-2 col-form-label">User Name | License</label>
+                        <label class="col-sm-2 col-form-label">User Name</label>
                         <div class="col-sm-10">
                             <div class="row">
-                                <div class="col">
-                                    <input id="username" type="text" class="form-control" placeholder="Username">
+                                <div class="col col-sm-5">
+                                    <input id="username" type="text" class="form-control" placeholder="Username"/>
+                                </div>
+                                <div class="col col-form-label col-sm-2"> 
+                                    <label>License</label>
                                 </div>
                                 <div class="col">
-                                    <input id="license" type="text" class="form-control" placeholder="license number">
+                                    <input id="license" type="text" class="form-control" placeholder="license number"/>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label class="col-sm-2 col-form-label">Email | Callsign</label>
+                        <label class="col-sm-2 col-form-label">Email</label>
                         <div class="col-sm-10">
                             <div class="row">
-                                <div class="col">
-                                    <input id="email" type="text" class="form-control" placeholder="Valid Email Address">
+                                <div class="col col-sm-5">
+                                    <input id="email" type="text" class="form-control" placeholder="valid Email Address"/>
+                                </div>
+                                <div class="col col-form-label col-sm-2">
+                                    <label>Callsign</label>
                                 </div>
                                 <div class="col">
-                                    <input id="callsign" type="text" class="form-control" placeholder="your nickname">
+                                    <input id="callsign" type="text" class="form-control" placeholder="your nickname"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label">WiFI SSID</label>
+                        <div class="col-sm-10">
+                            <div class="row">
+                                <div class="col col-sm-5">
+                                    <input id="ssid1" type="text" class="form-control" placeholder="SSID"/>
+                                </div>
+                                <div class="col col-form-label col-sm-2">
+                                    <label>Password</label>
+                                </div>
+                                <div class="col">
+                                    <input id="ssid1_pass" type="password" class="form-control" placeholder="Password"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    -->
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label">Main Canopy</label>
+                        <div class="col-sm-10">
+                            <div class="row">
+                                <div class="col col-sm-5">
+                                    <input id="main" type="text" class="form-control" placeholder="main canopy"/>
+                                </div>
+                                <div class="col col-form-label col-sm-2">
+                                    <label>Container</label>
+                                </div>
+                                <div class="col">
+                                    <input id="container" type="text" class="form-control" placeholder="container"/>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label class="col-sm-2 col-form-label">WiFi SSID1</label>
+                        <label class="col-sm-2 col-form-label">Suit</label>
                         <div class="col-sm-10">
                             <div class="row">
-                                <div class="col">
-                                    <input id="ssid1" type="text" class="form-control" placeholder="SSID">
+                                <div class="col col-sm-5">
+                                    <input id="suit" type="text" class="form-control" placeholder="suit"/>
+                                </div>
+                                <div class="col col-form-label col-sm-2">
+                                    <label>Reserve</label>
                                 </div>
                                 <div class="col">
-                                    <input id="ssid1_pass" type="password" class="form-control" placeholder="Password">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!--
-                    <div class="form-group row">
-                        <label class="col-sm-2 col-form-label">WiFi SSID2</label>
-                        <div class="col-sm-10">
-                            <div class="row">
-                                <div class="col">
-                                    <input id="ssid2" type="text" class="form-control" placeholder="SSID">
-                                </div>
-                                <div class="col">
-                                    <input id="ssid2_pass" type="password" class="form-control" placeholder="Password">
+                                    <input id="reserve" type="text" class="form-control" placeholder="reserve"/>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label class="col-sm-2 col-form-label">WiFi SSID3</label>
+                        <label class="col-sm-2 col-form-label">Jump#</label>
                         <div class="col-sm-10">
                             <div class="row">
-                                <div class="col">
-                                    <input id="ssid3" type="text" class="form-control" placeholder="SSID">
+                                <div class="col col-sm-5">
+                                    <input id="jump_start_number" type="number" class="form-control" placeholder="jumps"/>
+                                </div>
+                                <div class="col col-form-label col-sm-2">
+                                    <label>Timezone</label>
                                 </div>
                                 <div class="col">
-                                    <input id="ssid3_pass" type="password" class="form-control" placeholder="Password">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                     -->
-                    <div class="form-group row">
-                        <label class="col-sm-2 col-form-label">Start Jump# | Timezone</label>
-                        <div class="col-sm-10">
-                            <div class="row">
-                                <div class="col">
-                                    <input id="jump_start_number" type="number" class="form-control" placeholder="jumps">
-                                </div>
-                                <div class="col">
-                                    <input id="timezone" type="number" class="form-control" placeholder="UTC + xx">
+                                    <input id="timezone" type="number" class="form-control" placeholder="UTC + xx"/>
                                 </div>
                             </div>
                         </div>
@@ -134,18 +153,32 @@
                 <h4 class="card-title">Altimeter</h4>
                 <form>
                     <div class="form-group row">
-                        <label class="col-sm-2 col-form-label">Units metric/imperial</label>
+                        <label class="col-sm-2 col-form-label">Display</label>
                         <div class="col-sm-10">
-                            <div class="form-check form-check-inline">
-                                <input id="units_metric" type="checkbox" class="form-check-input" value="option1">
-                                <label class="form-check-label" for="units_metric">metric</label>
+                            <div class="row">
+                                <div class="col-sm-5">
+                                    <div class="form-check form-check-inline">
+                                        <input id="units_metric" type="checkbox" class="form-check-input" value="option1"/>
+                                        <label class="form-check-label" for="units_metric">metric</label>
+                                    </div> 
+                                    <div class="form-check form-check-inline">
+                                        <input id="flip" type="checkbox" class="form-check-input" value="flip"/>
+                                        <label class="form-check-label" for="units_metric">flip screen</label>
+                                    </div>                                     
+                                </div>
+                                <div style="float:right" class="col-form-label col-sm-3">
+                                    <label>Switch screen&nbsp; [m]</label>
+                                </div>
+                                <div style="float:right" class="col-sm-4">
+                                    <input id="big" type="number" class="form-control" placeholder="BIG at meters"/>
+                                </div>
                             </div>
                         </div>
                     </div>
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label">Special commands</label>
                         <div class="col-sm-10">
-                            <input id="altimeter_command" type="text" class="form-control" placeholder="">
+                            <input id="altimeter_command" type="text" class="form-control" placeholder=""/>
                         </div>
                     </div>
                 </form>
@@ -156,47 +189,57 @@
                 <h4 class="card-title">Logger</h4>
                 <form>
                     <div class="form-group row">
-                        <label class="col-sm-2 col-form-label">File Formats</label>
+                        <label class="col-sm-2 col-form-label">Autostart [m]</label>
                         <div class="col-sm-10">
-                            <input id="file_format" type="text" class="form-control" placeholder="GPX file">
+                            <div class="row">
+                                <div class="col col-sm-5">
+                                    <input id="autoStart" type="text" class="form-control" placeholder="Autostart"/>
+                                </div>
+                                <div class="col col-form-label col-sm-2">
+                                    <label>Filetype</label>
+                                </div>
+                                <div class="col">
+                                    <input id="file_format" type="text" class="form-control" placeholder="GPX file"/>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label">Special commands</label>
                         <div class="col-sm-10">
-                            <input id="logger_command" type="text" class="form-control" placeholder="">
+                            <input id="logger_command" type="text" class="form-control" placeholder=""/>
                         </div>
                     </div>
                 </form>
             </div>
         </div>
         <!--
-        <div class="card">
-            <div class="card-body">
-                <h4 class="card-title">Variometer</h4>
-                <form>
-                    <div class="form-group row">
-                        <label class="col-sm-2 col-form-label">Output</label>
-                        <div class="col-sm-10">
-                            <input id="variometer_output" type="text" class="form-control" placeholder="Bluetooth">
-                        </div>
+    <div class="card">
+        <div class="card-body">
+            <h4 class="card-title">Variometer</h4>
+            <form>
+                <div class="form-group row">
+                    <label class="col-sm-2 col-form-label">Output</label>
+                    <div class="col-sm-10">
+                        <input id="variometer_output" type="text" class="form-control" placeholder="Bluetooth">
                     </div>
-                    <div class="form-group row">
-                        <label class="col-sm-2 col-form-label">BT device name</label>
-                        <div class="col-sm-10">
-                            <input id="bt_device" type="text" class="form-control" placeholder="">
-                        </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-sm-2 col-form-label">BT device name</label>
+                    <div class="col-sm-10">
+                        <input id="bt_device" type="text" class="form-control" placeholder="">
                     </div>
-                    <div class="form-group row">
-                        <label class="col-sm-2 col-form-label">Special commands</label>
-                        <div class="col-sm-10">
-                            <input id="variometer_command" type="text" class="form-control" placeholder="">
-                        </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-sm-2 col-form-label">Special commands</label>
+                    <div class="col-sm-10">
+                        <input id="variometer_command" type="text" class="form-control" placeholder="">
                     </div>
-                </form>
-            </div>
+                </div>
+            </form>
         </div>
-         -->
+    </div>
+     -->
     </div>
 
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
@@ -214,17 +257,20 @@
             "license",
             "email",
             "callsign",
-            "ssid1",
-            "ssid1_pass",
-            // "ssid2",
-            // "ssid2_pass",
-            // "ssid3",
-            // "ssid3_pass",
+            // "ssid1",
+            // "ssid1_pass",
+             "main",
+             "container",
+             "suit",
+             "reserve",
             "jump_start_number",
             "timezone",
             "units_metric",
+            "flip",
+            "big",
             "altimeter_command",
             "file_format",
+            "autoStart",
             "logger_command",
             // "variometer_output",
             // "bt_device",
@@ -244,7 +290,7 @@
                     if (response.data) {
                         for (let index = 0; index < configKeys.length; index++) {
                             const key = configKeys[index];
-                            if (key == 'units_metric') {
+                            if (key == 'units_metric' || key == 'flip') {
                                 if (response.data[key] == "true") {
                                     document.getElementById(key).checked = true;
                                 } else {
@@ -271,7 +317,7 @@
             var configData = {};
             for (let index = 0; index < configKeys.length; index++) {
                 const key = configKeys[index];
-                if (key == 'units_metric' || key == 'units_imperial') {
+                if (key == 'units_metric' || key == 'flip') {
                     configData[key] = document.getElementById(key).checked;
                 } else {
                     configData[key] = document.getElementById(key).value;

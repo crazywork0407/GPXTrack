@@ -22,6 +22,9 @@
     <link rel="preconnect" href="https://fonts.googleapis.com"> 
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin> 
     <link href="https://fonts.googleapis.com/css2?family=Exo:wght@300&display=swap" rel="stylesheet">
+
+    <!-- AI Range Slider -->
+    <link href="./vendor/al-range-slider/css/al-range-slider.css" rel="stylesheet">
     <link href="./css/style.css" rel="stylesheet">
 
     <script src="https://d3js.org/d3.v5.min.js"></script>
@@ -48,17 +51,13 @@
        <!--  <h1 class="page-title">Track View</h1> -->
         <div class="row mb-4">
             <div class="col-md-6 col-sm-12 pt-4">
-                <div class="map-wrapper" style="height: 60vH;">
+                <div class="map-wrapper" style="height: 50vH;">
                     <div class="mapbox-gl-map" id="log-map"></div>
                     <ul class="track-info">
-                    <!--  
-                        <li><label>Lat:</label><span class="lat"></span></li>
-                        <li><label>Lon:</label><span class="lon"></span></li>
-                    -->
                     <li><label>Alt: &nbsp</label><span class="alt"></span> <span class="unit">m</span></li>
-                    <li><label>H-Spd: &nbsp</label><span class="speed"></span> <span class="unit unit-mph">m/s</span></li>
+                    <li><label>GNDSpd: &nbsp</label><span class="speed"></span> <span class="unit unit-mph">m/s</span></li>
                     <li><label>V-Spd: &nbsp</label><span class="sink"></span> <span class="unit">m/s</span></li>
-                    <li><label>Course: &nbsp</label><span class="heading"></span> &#xb0;</li>
+                    <li><label>Dir: &nbsp</label><span class="heading"></span> &#xb0;</li>
                     <li><label>Time: &nbsp</label><span class="time"></span></li>
                     </ul>
                 </div>
@@ -78,16 +77,21 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-6 col-sm-12 mt-4" style="height: 60vh;">
-                <figure class="track-graph" data-x="time" data-y="alt" data-x-unit="min" data-y-unit="m" data-label="Altitude"></figure>
-                <figure class="track-graph" data-x="time" data-y="speed" data-x-unit="min" data-y-unit="m/s" data-label="Speed"></figure>
-                <figure class="track-graph" data-x="time" data-y="sink" data-x-unit="min" data-y-unit="m/s" data-label="Sinkrate"></figure>
+            <div class="col-md-6 col-sm-12 mt-4">
+                <div class="graphs-wrapper" style="height: 50vh;">
+                    <figure class="track-graph" data-x="time" data-y="alt" data-x-unit="min" data-y-unit="m" data-label="Altitude"></figure>
+                    <figure class="track-graph" data-x="time" data-y="speed" data-x-unit="min" data-y-unit="m/s" data-label="GND-speed"></figure>
+                    <figure class="track-graph" data-x="time" data-y="sink" data-x-unit="min" data-y-unit="m/s" data-label="V-speed"></figure>
+                </div>
+                <div class="trim-control-wrapper">
+                    <div class="trim-control"></div>
+                </div>
             </div>
         </div>
         <div class="card" style="margin: 25px 0px;">
             <div class="card-header panel-primary" >
             <b>LOGBOOK</b>
-            <span id="logbook-username" style="font-size: 24px; margin-left: 150px; float:right; color:#fff; display: none;"></span>
+            <span id="logbook-username" style="font-size: 18px; margin-left: 150px; float:right; color:#fff; display: none;"></span>
             </div>
 
             <div class="table-responsive" style="max-height: 600px; overflow-y: auto; display: inline-block;">
@@ -180,9 +184,9 @@
     </div>
     <div class="site-footer">
         <div class="text-center">
-            <p>
+            <p> Airlog V0.9 &nbsp
                 &copy; 2022
-                <strong>CRWDgs</strong>. All Rights Reserved
+               ajanky @ <strong>CRWDgs.com</strong> – All Rights Reserved
             </p>
 
         </div>
@@ -275,8 +279,10 @@
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="./bootstrap/js/bootstrap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/10.0.0/bootstrap-slider.min.js"></script>
-    <script src="./GM_Utils/GPX2GM.js?autoload=false"></script>
-    
+ 
+    <!-- AL Range Slider JS -->
+    <script src="./vendor/al-range-slider/js/al-range-slider.js"></script>
+
     <!-- JS Files -->
     <script src="./js/main.js"></script>
     <script>
@@ -318,38 +324,6 @@
                         AirLog.drawTrackLine(evt.target.result);
                     }
 
-                    // if (first_s) {
-                    //     JB.LoadCSS(JB.GPX2GM.Path + "GPX2GM.css");
-                    //     JB.LoadScript(JB.GPX2GM.Path + "GPX2GM_Defs.js", function () {
-                    //         JB.Scripte.GPX2GM_Defs = 2;
-                    //         JB.GPX2GM.setparameters();
-                    //         if (JB.GPX2GM.GM_usage_ok()) {
-                    //             first_s = false;
-                    //             JB.icons = new JB.Icons(JB.GPX2GM.Path);
-                    //             JB.Debug_Info("Start", "Icons vorbereitet", false);
-                    //             JB.Scripte.maputils = 1;
-                    //             if (JB.GPX2GM.parameters.mapapi == "gm") {
-                    //                 if (location.protocol == "file:")
-                    //                     JB.LoadScript("https://maps.google.com/maps/api/js?callback=JB.gmcb", function () {
-                    //                         // _show(files);
-                    //                     });
-                    //                 else
-                    //                     JB.LoadScript("https://maps.google.com/maps/api/js?key=AIzaSyBpn-EB9zTc7b-tKl_qCAeBqDta5Gha3AA&callback=JB.gmcb", function () {
-                    //                         // _show(files);
-                    //                     });
-                    //                 JB.LoadScript(JB.GPX2GM.Path + "gmutils.js", function () { JB.Scripte.maputils = 2; });
-                    //             }
-                    //             else {
-                    //                 JB.LoadScript(JB.GPX2GM.Path + "leaflet/leaflet.js", function () { JB.Scripte.maplib = 2; });
-                    //                 JB.LoadCSS(JB.GPX2GM.Path + "leaflet/leaflet.css");
-                    //                 JB.LoadScript(JB.GPX2GM.Path + "osmutils.js", function () { JB.Scripte.maputils = 2; _show(files); });
-                    //             }
-                    //         }
-                    //     });
-                    // }
-                    // else {
-                    //     _show(files);
-                    // }
                 }
             };
             xhttp.open("POST", serverUrl + "dashboard/getLogFile", true);
@@ -358,13 +332,13 @@
 
         function _show(files) {
             first_p = true;
-            JB.GPX2GM.setparameters();
+        //    JB.GPX2GM.setparameters();
             if (map) {
                 map.Clear();
             }
             map = null;
-            map = new JB.makeMap("map1");
-            map.ShowGPX(files, "OSMDE");
+        //    map = new JB.makeMap("map1");
+        //    map.ShowGPX(files, "OSMDE");
             xferFiles(files);
         }
 

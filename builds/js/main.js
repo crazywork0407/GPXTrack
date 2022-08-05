@@ -68,6 +68,14 @@ AirLog.timeSpeed = 10;
 AirLog.timerID = false;
 
 /**
+ * Trim Values
+ * 
+ * @since 1.0.0
+ */
+AirLog.trimFrom = 0;
+AirLog.trimTo = 100;
+
+/**
  * Link Function between D3 and MapBox
  * 
  * @since 1.0.0
@@ -162,9 +170,9 @@ AirLog.getTrackInfo = function (data) {
     // Unit Convert
     if (!metric) {
         AirLog.trackInfo.map(function (item) {
-            item.alt = (item.alt * 3.28).toFixed(2);
-            item.speed = (item.speed * 2.237).toFixed(2);
-            item.sink = (item.sink * 3.28).toFixed(2);
+            item.alt = (item.alt * 3.28).toFixed(0);
+            item.speed = (item.speed * 2.237).toFixed(0);
+            item.sink = (item.sink * 3.28).toFixed(1);
 
             return item;
         })
@@ -219,9 +227,11 @@ AirLog.initMapBox = function () {
     mapboxgl.accessToken = "pk.eyJ1IjoiY3J3ZGdzIiwiYSI6ImNsNTg3eW1ldzBuM2QzZnFuams1aTVjNncifQ.1c3wrHRyHqS_etRPf8DaVA";
     AirLog.map = new mapboxgl.Map({
         container: "log-map",
-        style: "mapbox://styles/mapbox/light-v10",
+        // style: "mapbox://styles/mapbox/light-v10",
+        style: "mapbox://styles/mapbox/outdoors-v10",
+        // style: "mapbox://styles/crwdgs/cl5z22i9u003o14lc1zktqc1u",
         center: [13.405, 52.52],
-        zoom: 14
+        zoom: 13
     });
 
     AirLog.canvasContainer = AirLog.map.getCanvasContainer();
@@ -295,6 +305,10 @@ AirLog.drawTrackLine = function (data) {
 
     console.log(AirLog.graphs);
 
+    // Trim Handler
+    AirLog.getTrimInformation();
+    AirLog.initTrimControl('.trim-control', AirLog.trackInfo.length);
+
     // Graph Functions
     AirLog.graphs.forEach(function (item, index) {
         var result = AirLog.getGraphPoints(item.xAxis, item.yAxis);
@@ -313,14 +327,18 @@ AirLog.drawTrackLine = function (data) {
         AirLog.graphs[index].points = result.points;
         AirLog.graphs[index].path = AirLog.drawGraph(item.svg, result.points);
         AirLog.graphs[index].pos = AirLog.drawGraphPos(item.svg, result.points[0]);
+        AirLog.graphs[index].trimFrom = AirLog.drawTrimFrom(item.svg);
+        AirLog.graphs[index].trimTo = AirLog.drawTrimTo(item.svg);
     });
 
     $(window).on('resize', function () {
         AirLog.renderGraph();
         AirLog.renderGraphPos();
+        AirLog.renderTrimLines();
     });
     AirLog.renderGraph();
     AirLog.renderGraphPos();
+    AirLog.renderTrimLines();
 
     AirLog.map.on("viewreset", AirLog.render);
     AirLog.map.on("move", AirLog.render);
@@ -466,7 +484,7 @@ AirLog.drawGraph = function (graphSVG, points) {
         .datum(points)
         .attr("class", "track-path")
         .attr("d", AirLog.graphPathGenerator)
-        .attr("stroke", "#000")
+        .attr("stroke", "#3D5A80")
         .attr("stroke-width", 2)
         .attr("fill", "none");
 
@@ -632,7 +650,7 @@ AirLog.initAxis = function (svg, maxYValue, minYValue, label, xUnit = '', yUnit 
     AirLog.drawLine(svg, [{ x: 100, y: 0 }, { x: 100, y: 100 }]);
     AirLog.drawLine(svg, [{ x: 0, y: 0 }, { x: 100, y: 0 }]);
 
-    var deltas = [1, 2, 4, 5, 10],
+    var deltas = [1, 2, 4, 5, 10, 20],
         xDelta = -1,
         yDelta = -1,
         temp = Math.floor((maxYValue - minYValue) / Math.pow(10, Number.parseInt(Math.log10(maxYValue - minYValue).toString()) - 1));
@@ -679,6 +697,10 @@ AirLog.initAxis = function (svg, maxYValue, minYValue, label, xUnit = '', yUnit 
             yDelta = item;
         }
     });
+
+    if (-1 == yDelta) {
+        yDelta = deltas[deltas.length - 1];
+    }
 
     for (var i = 0; i <= temp; i = i + yDelta) {
         var xPos = i * 100 / temp;
@@ -793,6 +815,126 @@ AirLog.updateUnit = function () {
         }
     });
 };
+
+/**
+ * Init Trim Control
+ * 
+ * @since 1.0.0
+ * 
+ * @param {String} selector
+ */
+AirLog.initTrimControl = function (selector, length = 100) {
+    AirLog.trimControl = $(selector).alRangeSlider({
+        initialSelectedValues: { from: AirLog.trimFrom, to: AirLog.trimTo },
+        valuesPrecision: 4,
+        collideKnobs: true,
+        range: { min: 0, max: length - 1, step: 1 },
+        orientation: 'horizontal',
+        theme: 'light',
+        grid: { minTicksStep: 1, marksStep: 1 },
+        allowSmoothTransition: true,
+        showInputs: true,
+        showTooltips: true,
+        collideTooltips: true,
+        tooltipsSeparator: ' \u2192 ',
+    });
+
+    $('.al-range-slider__knob:nth-child(2) > span').attr('altitude', AirLog.trackInfo[AirLog.trimFrom]['alt'] + 'm');
+    $('.al-range-slider__knob:nth-child(3) > span').attr('altitude', AirLog.trackInfo[AirLog.trimTo]['alt'] + 'm');
+
+    $('body').on('rangeSliderChanged', function (e) {
+        AirLog.trimFrom = $('.trim-control .al-range-slider__input[name="from"]').val();
+        AirLog.trimTo = $('.trim-control .al-range-slider__input[name="to"]').val();
+
+        $('.al-range-slider__knob:nth-child(2) > span').attr('altitude', AirLog.trackInfo[AirLog.trimFrom]['alt'] + 'm');
+        $('.al-range-slider__knob:nth-child(3) > span').attr('altitude', AirLog.trackInfo[AirLog.trimTo]['alt'] + 'm');
+
+        AirLog.renderTrimLines();
+    });
+};
+
+/**
+ * Get Trim Information
+ * 
+ * @since 1.0.0
+ */
+AirLog.getTrimInformation = function () {
+    AirLog.trimFrom = 0;
+    AirLog.trimTo = AirLog.trackInfo.length - 1;
+};
+
+/**
+ * Draw Trim Lines
+ */
+AirLog.drawTrimLines = function () {
+    AirLog.graphs.forEach(function (item, index) {
+        // AirLog.initAxis(item.svg);
+        AirLog.drawLine(item.svg, [{ x: 0, y: 0 }, { x: 100, y: 0 }]);
+    });
+};
+
+/**
+ * Draw Trim From Line
+ * 
+ * @since 1.0.0
+ * 
+ * @param {Object} svg
+ */
+AirLog.drawTrimFrom = function (svg) {
+    return svg.append("line")
+        .style('stroke', '#222')
+        .style('stroke-width', 1);
+};
+
+/**
+ * Draw Trim To Line
+ * 
+ * @since 1.0.0
+ * 
+ * @param {Object} svg
+ */
+AirLog.drawTrimTo = function (svg) {
+    return svg.append("line")
+        .style('stroke', '#222')
+        .style('stroke-width', 1);
+};
+
+/**
+ * Render Trim To Line
+ * 
+ * @since 1.0.0
+ */
+AirLog.renderTrimLines = function () {
+    var project = function (d) {
+        AirLog.xLength = AirLog.$graphs.outerWidth() - 60;
+        AirLog.yLength = AirLog.$graphs.outerHeight() - 40;
+
+        return {
+            x: d.x * AirLog.xLength / 100 + 50,
+            y: d.y * AirLog.yLength / 100 + 10
+        };
+    }
+
+    AirLog.graphs.forEach(function (item) {
+        var fromXPos = AirLog.trimFrom * 100 / AirLog.trackInfo.length,
+            toXPos = AirLog.trimTo * 100 / AirLog.trackInfo.length,
+            fromPos1 = { x: fromXPos, y: 0 },
+            fromPos2 = { x: fromXPos, y: 100 },
+            topPos1 = { x: toXPos, y: 0 },
+            topPos2 = { x: toXPos, y: 100 };
+
+        item.trimFrom.attr("x1", project(fromPos1).x)
+            .attr("y1", project(fromPos1).y)
+            .attr("x2", project(fromPos2).x)
+            .attr("y2", project(fromPos2).y);
+
+        item.trimTo.attr("x1", project(topPos1).x)
+            .attr("y1", project(topPos1).y)
+            .attr("x2", project(topPos2).x)
+            .attr("y2", project(topPos2).y);
+    });
+};
+
 
 /**
  * Init Functions
