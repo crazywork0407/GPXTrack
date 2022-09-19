@@ -6,7 +6,7 @@ const { ref: sref, getDownloadURL } = require('firebase/storage');
 const { auth, database, storage } = require('./firebase');
 const { response } = require('express');
 const geoapifyKey = "bc1242ec712940f6a0c5972c63b13686";
-const tempUId = "0XG1ofhpLzWojIajLdxszlCMrcy2";
+const tempUId = "jjvJvndY8fPyE05BVuXvhVy98t73";
 
 
 const verifyUid = (req, res) => {
@@ -184,6 +184,23 @@ const saveLogData = async (req, res) => {
     // })
 }
 
+const trimLogData = async (req, res) => {
+    const { uid, logNr } = req.body;
+    var newLogData = req.body;
+
+    newLogData.uid = uid ? uid : tempUId;
+
+    const configRef = dref(database, uid + "/logbook/" + logNr);
+
+    dSet(configRef, newLogData)
+        .then(() => {
+            res.send({ status: true });
+        })
+        .catch((error) => {
+            res.send({ status: false });
+        })
+}
+
 module.exports = {
     verifyUid,
     login,
@@ -191,5 +208,6 @@ module.exports = {
     getWindsData,
     getLogFile,
     getDownloadUrl,
-    saveLogData
+    saveLogData,
+    trimLogData
 }

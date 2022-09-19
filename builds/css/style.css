@@ -20,6 +20,7 @@
     line-height: 14px;
     color: #eee;
     background-color: rgba(20, 20, 20, 0.75);
+    z-index: 2;
 }
 
 /* Graphs */
@@ -40,8 +41,35 @@
 }
 
 /* Trim Control */
+.trim-control-wrapper {
+    padding: 15px;
+    border-radius: 5px;
+    background: #3d5a80;
+}
+.trim-control-wrapper h5 {
+    font-size: 14px;
+    line-height: 1;
+}
+.trim-control-wrapper .trim-control {
+    flex: 1;
+}
 .trim-control-wrapper .al-range-slider {
-    padding-left: 50px;
+    padding-top: 14px;
+    padding-bottom: 15px;
+}
+.trim-control-wrapper .al-range-slider__track {
+    height: 6px;
+}
+.trim-control-wrapper .al-range-slider__tooltip {
+    background-color: transparent;
+    border: none;
+    color: #fff;
+    box-shadow: none;
+    padding: 0;
+}
+.trim-control-wrapper .al-range-slider__bar {
+    background: rgb(255, 255, 255);
+    box-shadow: rgb(255 255 255) 0px 0px 2px 0px;
 }
 .trim-control-wrapper .al-range-slider__knob .al-range-slider__tooltip {
     text-indent: -999px;
@@ -55,10 +83,221 @@
     right: 50%;
     transform: translateX(50%);
 }
-.trim-control-wrapper .al-range-slider__input {
+.trim-control-wrapper .al-range-slider__input,
+.trim-control-wrapper .al-range-slider__grid-tick {
     display: none;
+}
+.trim-control-wrapper .al-range-slider__track {
+    margin: 0;
 }
 
 .al-range-slider__grid-tick:first-child > span::after {
     content: '(S)';
+}
+
+/* Play Control */
+.play-control {
+    padding: 15px;
+    background: #3d5a80;
+    border-radius: 5px;
+    color: #fff;
+}
+.btn-svg {
+    padding: 0;
+    background-color: transparent;
+    border: none;
+    line-height: 1;
+    outline: none !important;
+    cursor: pointer;
+    transition: opacity .3s;
+}
+.btn-svg:hover {
+    opacity: .8;
+}
+.btn-svg svg {
+    width: 30px;
+}
+.play-control input[type=range] {
+    -webkit-appearance: none;
+    width: 100%;
+    border-radius: 8px;
+    height: 6px;
+    background-color: #fff; 
+    box-shadow: rgb(255 255 255) 0px 0px 2px 0px;
+}
+.play-control input[type='range']::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    background-color: #ecf0f1;
+    border: 1px solid #bdc3c7;
+    width: 15px;
+    height: 20px;
+    border-radius: 3px;
+    cursor: pointer;
+}
+.play-control .speed-input {
+    width: 40px;
+    appearance: none;
+    background: transparent;
+    border: none;
+    color: #fff;
+}
+.range-slider-wrapper {
+    flex: 1;
+}
+
+.play-control h5,
+.play-control .speed-control {
+    font-size: 14px;
+    text-transform: uppercase;
+    line-height: 1;
+}
+
+/* Table */
+#logbook tr {
+    cursor: pointer;
+    transition: background-color .3s;
+}
+#logbook .table-button {
+    text-align: center;
+}
+#logbook .table-button .btn-edit,
+#logbook .table-button .btn-view {
+    display: none;
+}
+
+#logbook tr:hover {
+    background-color: #e5e5e5;
+}
+
+/* GPS Status*/
+.gps-status {
+    display: inline-flex;
+}
+.gps-status .status-pin {
+    display: none;
+    width: 8px;
+    height: 16px;
+    border-radius: 2px;
+    background-color: #fff;
+}
+.gps-status .status-pin.bad {
+    background-color: rgb(254,81,77);
+}
+.gps-status .status-pin.ok {
+    background-color: rgb(252,255,95);
+}
+.gps-status .status-pin.good {
+    background-color: rgb(98,222,92);
+}
+
+.gps-status[data-value="1"] .status-pin:nth-child(1),
+.gps-status[data-value="2"] .status-pin:nth-child(1),
+.gps-status[data-value="3"] .status-pin:nth-child(1),
+.gps-status[data-value="4"] .status-pin:nth-child(1),
+.gps-status[data-value="5"] .status-pin:nth-child(1),
+.gps-status[data-value="6"] .status-pin:nth-child(1),
+.gps-status[data-value="7"] .status-pin:nth-child(1),
+.gps-status[data-value="8"] .status-pin:nth-child(1),
+.gps-status[data-value="9"] .status-pin:nth-child(1),
+.gps-status[data-value="10"] .status-pin:nth-child(1) {
+    display: block;
+}
+
+.gps-status[data-value="2"] .status-pin:nth-child(2),
+.gps-status[data-value="3"] .status-pin:nth-child(2),
+.gps-status[data-value="4"] .status-pin:nth-child(2),
+.gps-status[data-value="5"] .status-pin:nth-child(2),
+.gps-status[data-value="6"] .status-pin:nth-child(2),
+.gps-status[data-value="7"] .status-pin:nth-child(2),
+.gps-status[data-value="8"] .status-pin:nth-child(2),
+.gps-status[data-value="9"] .status-pin:nth-child(2),
+.gps-status[data-value="10"] .status-pin:nth-child(2) {
+    display: block;
+}
+
+.gps-status[data-value="3"] .status-pin:nth-child(3),
+.gps-status[data-value="4"] .status-pin:nth-child(3),
+.gps-status[data-value="5"] .status-pin:nth-child(3),
+.gps-status[data-value="6"] .status-pin:nth-child(3),
+.gps-status[data-value="7"] .status-pin:nth-child(3),
+.gps-status[data-value="8"] .status-pin:nth-child(3),
+.gps-status[data-value="9"] .status-pin:nth-child(3),
+.gps-status[data-value="10"] .status-pin:nth-child(3) {
+    display: block;
+}
+
+.gps-status[data-value="4"] .status-pin:nth-child(4),
+.gps-status[data-value="5"] .status-pin:nth-child(4),
+.gps-status[data-value="6"] .status-pin:nth-child(4),
+.gps-status[data-value="7"] .status-pin:nth-child(4),
+.gps-status[data-value="8"] .status-pin:nth-child(4),
+.gps-status[data-value="9"] .status-pin:nth-child(4),
+.gps-status[data-value="10"] .status-pin:nth-child(4) {
+    display: block;
+}
+
+.gps-status[data-value="5"] .status-pin:nth-child(5),
+.gps-status[data-value="6"] .status-pin:nth-child(5),
+.gps-status[data-value="7"] .status-pin:nth-child(5),
+.gps-status[data-value="8"] .status-pin:nth-child(5),
+.gps-status[data-value="9"] .status-pin:nth-child(5),
+.gps-status[data-value="10"] .status-pin:nth-child(5) {
+    display: block;
+}
+
+.gps-status[data-value="6"] .status-pin:nth-child(6),
+.gps-status[data-value="7"] .status-pin:nth-child(6),
+.gps-status[data-value="8"] .status-pin:nth-child(6),
+.gps-status[data-value="9"] .status-pin:nth-child(6),
+.gps-status[data-value="10"] .status-pin:nth-child(6) {
+    display: block;
+}
+
+.gps-status[data-value="7"] .status-pin:nth-child(7),
+.gps-status[data-value="8"] .status-pin:nth-child(7),
+.gps-status[data-value="9"] .status-pin:nth-child(7),
+.gps-status[data-value="10"] .status-pin:nth-child(7) {
+    display: block;
+}
+
+.gps-status[data-value="8"] .status-pin:nth-child(8),
+.gps-status[data-value="9"] .status-pin:nth-child(8),
+.gps-status[data-value="10"] .status-pin:nth-child(8) {
+    display: block;
+}
+
+.gps-status[data-value="9"] .status-pin:nth-child(9),
+.gps-status[data-value="10"] .status-pin:nth-child(9) {
+    display: block;
+}
+
+.gps-status[data-value="10"] .status-pin:nth-child(10) {
+    display: block;
+}
+.gps-status .status-pin + .status-pin {
+    margin-left: 2px;
+}
+
+/* Track Toggle */
+#track-move {
+    appearance: none;
+    width: 32px;
+    height: 17px;
+    border-radius: 10px;
+    background: #fff;
+}
+#track-move::before {
+    content: '';
+    display: block;
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    background-color: #999;
+    transform: translate(1px, 1px);
+    transition: transform .3s, background-color .3s;
+}
+
+#track-move:checked::before {
+    transform: translate(16px, 1px);
+    background-color: #007bff;
 }
