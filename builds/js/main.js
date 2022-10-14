@@ -338,6 +338,8 @@ AirLog.initMapBox = function () {
         zoom: 13
     });
 
+    AirLog.map.dragRotate.disable();
+
     AirLog.canvasContainer = AirLog.map.getCanvasContainer();
 
     AirLog.d3svg = d3.select(AirLog.canvasContainer)
@@ -473,6 +475,8 @@ AirLog.timerHandle = function () {
         AirLog.timerID = false;
         AirLog.timePos = 0;
         clearInterval(tempId);
+
+        $('.buttons-wrapper .btn-play').removeClass('playing');
     }
 
     AirLog.pos = Array(AirLog.trackPoints[AirLog.timePos]);
@@ -724,35 +728,35 @@ AirLog.drawWindVector = function (svg, color = '#00e') {
 
         var currentWindData = AirLog.getCurrentWindData(pos),
             length = currentWindData.speed * 100 / 20,
-            deltaX = Math.sin(Math.PI * (parseInt(currentWindData.dir) + AirLog.map.getBearing()) / 180) * length,
-            deltaY = Math.cos(Math.PI * (parseInt(currentWindData.dir) + AirLog.map.getBearing()) / 180) * length;
+            deltaX = Math.sin(Math.PI * (parseInt(currentWindData.dir) - AirLog.map.getBearing()) / 180) * length,
+            deltaY = Math.cos(Math.PI * (parseInt(currentWindData.dir) - AirLog.map.getBearing()) / 180) * length;
 
         console.log(AirLog.map.getBearing());
 
         line.attr("x1", project(AirLog.trackPoints[pos]).x)
             .attr("y1", project(AirLog.trackPoints[pos]).y)
             .attr("x2", project(AirLog.trackPoints[pos]).x + deltaX)
-            .attr("y2", project(AirLog.trackPoints[pos]).y + deltaY);
+            .attr("y2", project(AirLog.trackPoints[pos]).y - deltaY);
 
-        deltaX = Math.sin(Math.PI * (parseInt(currentWindData.dir) + AirLog.map.getBearing() - 20) / 180) * 20;
-        deltaY = Math.cos(Math.PI * (parseInt(currentWindData.dir) + AirLog.map.getBearing() - 20) / 180) * 20;
+        deltaX = Math.sin(Math.PI * (parseInt(currentWindData.dir) - AirLog.map.getBearing() - 20) / 180) * 20;
+        deltaY = Math.cos(Math.PI * (parseInt(currentWindData.dir) - AirLog.map.getBearing() - 20) / 180) * 20;
 
         console.log(AirLog.map.getBearing());
 
         line1.attr("x1", project(AirLog.trackPoints[pos]).x)
             .attr("y1", project(AirLog.trackPoints[pos]).y)
             .attr("x2", project(AirLog.trackPoints[pos]).x + deltaX)
-            .attr("y2", project(AirLog.trackPoints[pos]).y + deltaY);
+            .attr("y2", project(AirLog.trackPoints[pos]).y - deltaY);
 
-        deltaX = Math.sin(Math.PI * (parseInt(currentWindData.dir) + AirLog.map.getBearing() + 20) / 180) * 20;
-        deltaY = Math.cos(Math.PI * (parseInt(currentWindData.dir) + AirLog.map.getBearing() + 20) / 180) * 20;
+        deltaX = Math.sin(Math.PI * (parseInt(currentWindData.dir) - AirLog.map.getBearing() + 20) / 180) * 20;
+        deltaY = Math.cos(Math.PI * (parseInt(currentWindData.dir) - AirLog.map.getBearing() + 20) / 180) * 20;
 
         console.log(AirLog.map.getBearing());
 
         line2.attr("x1", project(AirLog.trackPoints[pos]).x)
             .attr("y1", project(AirLog.trackPoints[pos]).y)
             .attr("x2", project(AirLog.trackPoints[pos]).x + deltaX)
-            .attr("y2", project(AirLog.trackPoints[pos]).y + deltaY);
+            .attr("y2", project(AirLog.trackPoints[pos]).y - deltaY);
     }).bind(line, line1, line2);
 
     var clear = (function () {
@@ -1019,19 +1023,12 @@ AirLog.initPlayButton = function (selector) {
     $('body').on('click', selector, function (e) {
         if (!AirLog.timerID) {
             AirLog.timerID = setInterval(AirLog.timerHandle, 1000 / (AirLog.timeSpan * AirLog.timeSpeed));
+            $(this).addClass('playing');
+        } else {
+            clearInterval(AirLog.timerID);
+            AirLog.timerID = false;
+            $(this).removeClass('playing');
         }
-    })
-}
-
-/**
- * Initialize Stop Button
- * 
- * @since 1.0.0
- */
-AirLog.initStopButton = function (selector) {
-    $('body').on('click', selector, function (e) {
-        clearInterval(AirLog.timerID);
-        AirLog.timerID = false;
     })
 }
 
@@ -1340,6 +1337,13 @@ AirLog.refreshGraph = function () {
     AirLog.map.on("move", AirLog.render);
     AirLog.map.on("moveend", AirLog.render);
     AirLog.render(); // Call once to render
+
+
+    if (AirLog.windData.length > 0) {
+        AirLog.drawWindVector(AirLog.d3svg);
+    }
+
+    AirLog.drawMarkers();
 };
 
 /**
@@ -1493,7 +1497,6 @@ AirLog.getCurrentWindData = function (pos) {
     AirLog.initMapBox();
     AirLog.initGraph('.track-graph');
     AirLog.initPlayButton('.play-control .btn-play');
-    AirLog.initStopButton('.play-control .btn-stop');
     AirLog.initRangeSlider('.play-control .range-slider');
     AirLog.initSpeedControl('#speed');
     AirLog.initDblClick();

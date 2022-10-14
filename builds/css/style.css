@@ -165,6 +165,10 @@
     display: none;
 }
 
+#logbook .table-button .btn:not(:last-child) {
+    display: none !important;
+}
+
 #logbook tr:hover {
     background-color: #e5e5e5;
 }
@@ -300,4 +304,12 @@
 #track-move:checked::before {
     transform: translate(16px, 1px);
     background-color: #007bff;
+}
+
+.buttons-wrapper .btn-play:not(.playing) svg:last-child {
+    display: none;
+}
+
+.buttons-wrapper .btn-play.playing svg:first-child {
+    display: none;
 }

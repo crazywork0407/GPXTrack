@@ -16,10 +16,10 @@ app.use(express.static(dir.dir + '/builds'))
 app.use(express.static(dir.dir + '/builds/dashboard'))
 app.use(express.static(dir.dir + '/builds/config'))
 app.use(express.static(dir.dir + '/builds/bootstrap'))
-app.use(express.static(dir.dir + '/builds/GM_Utils'))
+// app.use(express.static(dir.dir + '/builds/GM_Utils'))
 app.use('/api', routes)
 app.get('*', (req, res) => res.sendFile(dir.dir + '/builds/index.html'))
 
-http.listen(port, ()=>{
+http.listen(port, () => {
     console.log('server listening on:', port)
 })
