@@ -57,7 +57,7 @@ const getLogbook = (req, res) => {
         for (let index = 0; index < logbookKeys.length; index++) {
             const key = logbookKeys[index];
             if (logbookList[key].logFile.length && logbookList[key].logFile != " ") {
-                logbookList[key].logFile = logbookList[key].logFile + '.gpx';
+                logbookList[key].logFile = logbookList[key].logFile + '.csv';
             } else {
                 logbookList[key].logFile = " ";
             }
@@ -157,7 +157,7 @@ const saveLogData = async (req, res) => {
                 for (let index = 0; index < logbookKeys.length; index++) {
                     const key = logbookKeys[index];
                     if (logbookList[key].logFile.length && logbookList[key].logFile.substring(0, 1) != " ") {
-                        logbookList[key].logFile = logbookList[key].logFile + '.gpx';
+                        logbookList[key].logFile = logbookList[key].logFile + '.csv';
                     } else {
                         logbookList[key].logFile = " ";
                     }

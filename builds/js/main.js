@@ -1368,7 +1368,7 @@ AirLog.initTrimButton = function (selector) {
         newLogData.uid = uid;
         newLogData.trimFrom = AirLog.trimFrom;
         newLogData.trimTo = AirLog.trimTo;
-        newLogData.logFile = newLogData.logFile.replace('.gpx', '');
+        newLogData.logFile = newLogData.logFile.replace('.csv', '');
 
         $.ajax({
             type: "POST",

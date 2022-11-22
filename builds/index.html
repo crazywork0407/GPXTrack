@@ -9,18 +9,19 @@
     <meta name="apple-touch-fullscreen" content="yes" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <link href="https://airlog.crwdgs.com/img/airlog167.png" rel="apple-touch-icon">
-      
+
     <title>JumpLogger Track View</title>
 
-    <!-- Optional CSS --> 
+    <!-- Optional CSS -->
     <link rel="stylesheet" href="./dashboard/dashboard.css">
 
-    <!-- Bootstrap CSS -->         
-    <link rel="stylesheet" href="./bootstrap/css/bootstrap.min.css"/> 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/10.0.0/css/bootstrap-slider.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"/> 
-    <link rel="preconnect" href="https://fonts.googleapis.com"> 
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin> 
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="./bootstrap/css/bootstrap.min.css" />
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/10.0.0/css/bootstrap-slider.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Exo:wght@300&display=swap" rel="stylesheet">
 
     <!-- AI Range Slider -->
@@ -28,16 +29,16 @@
     <link href="./css/style.css" rel="stylesheet">
 
     <script src="https://d3js.org/d3.v5.min.js"></script>
-    <!-- <link href="https://api.tiles.mapbox.com/mapbox-gl-js/v0.53.0/mapbox-gl.css" rel="stylesheet">
-    <script src="https://api.tiles.mapbox.com/mapbox-gl-js/v0.53.0/mapbox-gl.js"></script> -->
     <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v2.10.0/mapbox-gl.js'></script>
     <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v2.10.0/mapbox-gl.css' rel='stylesheet' />
-</head>  
+</head>
+
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <a class="navbar-brand" href="#" > <img src="img/airlog75wh.png" alt="logo"/> </a>
-        <h2 class="titl">jumpLogger<wbr> Track<wbr> View</h2> 
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <a class="navbar-brand" href="#"> <img src="img/airlog75wh.png" alt="logo" /> </a>
+        <h2 class="titl">jumpLogger<wbr> Track<wbr> View</h2>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
 
@@ -45,37 +46,39 @@
             <ul class="navbar-nav mr-auto"></ul>
             <div id="navbar-username" style="font-size: 24px; color:#fff; margin-right: 20px; display: none;"></div>
             <form class="form-inline my-2 my-lg-0" id="navbar-buttons">
-                <button type="button" class="btn btn-warning mr-2" data-toggle="modal" data-target="#loginModal">Login</button>
+                <button type="button" class="btn btn-warning mr-2" data-toggle="modal"
+                    data-target="#loginModal">Login</button>
             </form>
         </div>
     </nav>
     <div class="container-fluid">
-       <!--  <h1 class="page-title">Track View</h1> -->
+        <!--  <h1 class="page-title">Track View</h1> -->
         <div class="row mb-4">
             <div class="col-md-6 col-sm-12 pt-4">
                 <div class="map-wrapper" style="height: 50vH;">
                     <div class="mapbox-gl-map" id="log-map"></div>
                     <ul class="track-info">
-                    <li><label>Alt: &nbsp</label><span class="alt"></span> <span class="unit">m</span></li>
-                    <li><label>GNDSpd: &nbsp</label><span class="speed"></span> <span class="unit unit-mph">m/s</span></li>
-                    <li><label>V-Spd: &nbsp</label><span class="sink"></span> <span class="unit">m/s</span></li>
-                    <li><label>Dir: &nbsp</label><span class="heading"></span> &#xb0;</li>
-                    <li><label>Time: &nbsp</label><span class="time"></span></li>
-                    <li class="d-flex align-items-center">
-                        <lable class="mr-1">GPS:</lable>
-                        <div class="gps-status" data-value="8">
-                            <span class="status-pin bad"></span>
-                            <span class="status-pin bad"></span>
-                            <span class="status-pin bad"></span>
-                            <span class="status-pin ok"></span>
-                            <span class="status-pin ok"></span>
-                            <span class="status-pin ok"></span>
-                            <span class="status-pin ok"></span>
-                            <span class="status-pin good"></span>
-                            <span class="status-pin good"></span>
-                            <span class="status-pin good"></span>
-                        </div>
-                    </li>
+                        <li><label>Alt: &nbsp</label><span class="alt"></span> <span class="unit">m</span></li>
+                        <li><label>GNDSpd: &nbsp</label><span class="speed"></span> <span
+                                class="unit unit-mph">m/s</span></li>
+                        <li><label>V-Spd: &nbsp</label><span class="sink"></span> <span class="unit">m/s</span></li>
+                        <li><label>Dir: &nbsp</label><span class="heading"></span> &#xb0;</li>
+                        <li><label>Time: &nbsp</label><span class="time"></span></li>
+                        <li class="d-flex align-items-center">
+                            <lable class="mr-1">GPS:</lable>
+                            <div class="gps-status" data-value="8">
+                                <span class="status-pin bad"></span>
+                                <span class="status-pin bad"></span>
+                                <span class="status-pin bad"></span>
+                                <span class="status-pin ok"></span>
+                                <span class="status-pin ok"></span>
+                                <span class="status-pin ok"></span>
+                                <span class="status-pin ok"></span>
+                                <span class="status-pin good"></span>
+                                <span class="status-pin good"></span>
+                                <span class="status-pin good"></span>
+                            </div>
+                        </li>
                     </ul>
                 </div>
                 <div class="play-control mt-4">
@@ -85,32 +88,42 @@
                         </div>
                         <div class="col-6 speed-control d-flex align-items-center justify-content-end">
                             <div class="d-inline-flex align-items-center mr-3">
-                                <input type="checkbox" class="track-move mr-1" id="track-move"><label class="mb-0" for="track-move">Track Movement</label>
+                                <input type="checkbox" class="track-move mr-1" id="track-move"><label class="mb-0"
+                                    for="track-move">Track Movement</label>
                             </div>
-                            <label class="mr-1 mb-0">Speed:</label><input type="number" value="10" id="speed" class="speed-input" style="width: 40px;">
+                            <label class="mr-1 mb-0">Speed:</label><input type="number" value="10" id="speed"
+                                class="speed-input" style="width: 40px;">
                         </div>
                     </div>
                     <div class="d-flex align-items-center">
                         <div class="buttons-wrapper d-flex align-items-center mr-2">
                             <button class="btn-svg btn-play mr-2" id="play">
-                                <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-                                viewBox="0 0 496.158 496.158" style="enable-background:new 0 0 496.158 496.158;" xml:space="preserve">
-                                    <path style="fill:#32BEA6;" d="M496.158,248.085c0-137.021-111.07-248.082-248.076-248.082C111.07,0.002,0,111.062,0,248.085
-                                        c0,137.002,111.07,248.071,248.083,248.071C385.088,496.155,496.158,385.086,496.158,248.085z"/>
+                                <svg version="1.1" xmlns="http://www.w3.org/2000/svg"
+                                    xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                                    viewBox="0 0 496.158 496.158" style="enable-background:new 0 0 496.158 496.158;"
+                                    xml:space="preserve">
+                                    <path style="fill:#32BEA6;"
+                                        d="M496.158,248.085c0-137.021-111.07-248.082-248.076-248.082C111.07,0.002,0,111.062,0,248.085
+                                        c0,137.002,111.07,248.071,248.083,248.071C385.088,496.155,496.158,385.086,496.158,248.085z" />
                                     <path style="fill:#FFFFFF;" d="M370.805,235.242L195.856,127.818c-4.776-2.934-11.061-3.061-15.951-0.322
                                         c-4.979,2.785-8.071,8.059-8.071,13.762v214c0,5.693,3.083,10.963,8.046,13.752c2.353,1.32,5.024,2.02,7.725,2.02
                                         c2.897,0,5.734-0.797,8.205-2.303l174.947-106.576c4.657-2.836,7.556-7.986,7.565-13.44
-                                        C378.332,243.258,375.452,238.096,370.805,235.242z"/>
+                                        C378.332,243.258,375.452,238.096,370.805,235.242z" />
                                 </svg>
-                                <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-                                    viewBox="0 0 496.158 496.158" style="enable-background:new 0 0 496.158 496.158;" xml:space="preserve">
-                                    <path style="fill:#E04F5F;" d="M496.158,248.085c0-137.021-111.07-248.082-248.076-248.082C111.07,0.002,0,111.062,0,248.085
-                                        c0,137.002,111.07,248.071,248.083,248.071C385.088,496.155,496.158,385.086,496.158,248.085z"/>
+                                <svg version="1.1" xmlns="http://www.w3.org/2000/svg"
+                                    xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                                    viewBox="0 0 496.158 496.158" style="enable-background:new 0 0 496.158 496.158;"
+                                    xml:space="preserve">
+                                    <path style="fill:#E04F5F;"
+                                        d="M496.158,248.085c0-137.021-111.07-248.082-248.076-248.082C111.07,0.002,0,111.062,0,248.085
+                                        c0,137.002,111.07,248.071,248.083,248.071C385.088,496.155,496.158,385.086,496.158,248.085z" />
                                     <g>
-                                        <path style="fill:#FFFFFF;" d="M223.082,121.066h-60.006c-5.523,0-10,4.479-10,10v234.024c0,5.523,4.477,10,10,10h60.006
-                                            c5.523,0,10-4.477,10-10V131.066C233.082,125.545,228.605,121.066,223.082,121.066z"/>
-                                        <path style="fill:#FFFFFF;" d="M333.082,121.066h-60.006c-5.523,0-10,4.479-10,10v234.024c0,5.523,4.477,10,10,10h60.006
-                                            c5.523,0,10-4.477,10-10V131.066C343.082,125.545,338.605,121.066,333.082,121.066z"/>
+                                        <path style="fill:#FFFFFF;"
+                                            d="M223.082,121.066h-60.006c-5.523,0-10,4.479-10,10v234.024c0,5.523,4.477,10,10,10h60.006
+                                            c5.523,0,10-4.477,10-10V131.066C233.082,125.545,228.605,121.066,223.082,121.066z" />
+                                        <path style="fill:#FFFFFF;"
+                                            d="M333.082,121.066h-60.006c-5.523,0-10,4.479-10,10v234.024c0,5.523,4.477,10,10,10h60.006
+                                            c5.523,0,10-4.477,10-10V131.066C343.082,125.545,338.605,121.066,333.082,121.066z" />
                                 </svg>
                             </button>
                         </div>
@@ -122,22 +135,43 @@
             </div>
             <div class="col-md-6 col-sm-12 mt-4">
                 <div class="graphs-wrapper" style="height: 50vh;">
-                    <figure class="track-graph" data-x="time" data-y="alt" data-x-unit="min" data-y-unit="m" data-label="Altitude"></figure>
-                    <figure class="track-graph" data-x="time" data-y="speed" data-x-unit="min" data-y-unit="m/s" data-label="GND-speed"></figure>
-                    <figure class="track-graph" data-x="time" data-y="sink" data-x-unit="min" data-y-unit="m/s" data-label="V-speed"></figure>
+                    <figure class="track-graph" data-x="time" data-y="alt" data-x-unit="min" data-y-unit="m"
+                        data-label="Altitude"></figure>
+                    <figure class="track-graph" data-x="time" data-y="speed" data-x-unit="min" data-y-unit="m/s"
+                        data-label="GND-speed"></figure>
+                    <figure class="track-graph" data-x="time" data-y="sink" data-x-unit="min" data-y-unit="m/s"
+                        data-label="V-speed"></figure>
                 </div>
                 <div class="trim-control-wrapper mt-4">
                     <h5 class="text-uppercase text-white">Trim</h5>
                     <div class="d-flex align-items-center">
                         <div class="button-control text-center d-flex align-items-center">
                             <button class="btn-svg btn-play mr-2" id="trim">
-                                <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" preserveAspectRatio="xMidYMid meet"><circle cx="32" cy="32" r="30" fill="#4bd37b"></circle><path fill="#fff" d="M46 14L25 35.6l-7-7.2l-7 7.2L25 50l28-28.8z"></path>
+                                <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg"
+                                    xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img"
+                                    preserveAspectRatio="xMidYMid meet">
+                                    <circle cx="32" cy="32" r="30" fill="#4bd37b"></circle>
+                                    <path fill="#fff" d="M46 14L25 35.6l-7-7.2l-7 7.2L25 50l28-28.8z"></path>
                                 </svg>
                             </button>
                             <button class="btn-svg btn-play btn-play mr-2" id="reset">
-                                <svg xmlns="http://www.w3.org/2000/svg" style="width: 28px" viewBox="0 0 122.88 122.88"><defs><style>.cls-1{fill:#f44336;fill-rule:evenodd;}.cls-2{fill:#ffffff;}</style></defs>
-                                    <path class="cls-2" d="M61.44,0A61.44,61.44,0,1,1,0,61.44,61.44,61.44,0,0,1,61.44,0ZM74.58,36.8c1.74-1.77,2.83-3.18,5-1l7,7.13c2.29,2.26,2.17,3.58,0,5.69L73.33,61.83,86.08,74.58c1.77,1.74,3.18,2.83,1,5l-7.13,7c-2.26,2.29-3.58,2.17-5.68,0L61.44,73.72,48.63,86.53c-2.1,2.15-3.42,2.27-5.68,0l-7.13-7c-2.2-2.15-.79-3.24,1-5l12.73-12.7L36.35,48.64c-2.15-2.11-2.27-3.43,0-5.69l7-7.13c2.15-2.2,3.24-.79,5,1L61.44,49.94,74.58,36.8Z"/>
-                                    <path class="cls-1" d="M61.44,0A61.44,61.44,0,1,1,0,61.44,61.44,61.44,0,0,1,61.44,0ZM74.58,36.8c1.74-1.77,2.83-3.18,5-1l7,7.13c2.29,2.26,2.17,3.58,0,5.69L73.33,61.83,86.08,74.58c1.77,1.74,3.18,2.83,1,5l-7.13,7c-2.26,2.29-3.58,2.17-5.68,0L61.44,73.72,48.63,86.53c-2.1,2.15-3.42,2.27-5.68,0l-7.13-7c-2.2-2.15-.79-3.24,1-5l12.73-12.7L36.35,48.64c-2.15-2.11-2.27-3.43,0-5.69l7-7.13c2.15-2.2,3.24-.79,5,1L61.44,49.94,74.58,36.8Z"/>
+                                <svg xmlns="http://www.w3.org/2000/svg" style="width: 28px" viewBox="0 0 122.88 122.88">
+                                    <defs>
+                                        <style>
+                                            .cls-1 {
+                                                fill: #f44336;
+                                                fill-rule: evenodd;
+                                            }
+
+                                            .cls-2 {
+                                                fill: #ffffff;
+                                            }
+                                        </style>
+                                    </defs>
+                                    <path class="cls-2"
+                                        d="M61.44,0A61.44,61.44,0,1,1,0,61.44,61.44,61.44,0,0,1,61.44,0ZM74.58,36.8c1.74-1.77,2.83-3.18,5-1l7,7.13c2.29,2.26,2.17,3.58,0,5.69L73.33,61.83,86.08,74.58c1.77,1.74,3.18,2.83,1,5l-7.13,7c-2.26,2.29-3.58,2.17-5.68,0L61.44,73.72,48.63,86.53c-2.1,2.15-3.42,2.27-5.68,0l-7.13-7c-2.2-2.15-.79-3.24,1-5l12.73-12.7L36.35,48.64c-2.15-2.11-2.27-3.43,0-5.69l7-7.13c2.15-2.2,3.24-.79,5,1L61.44,49.94,74.58,36.8Z" />
+                                    <path class="cls-1"
+                                        d="M61.44,0A61.44,61.44,0,1,1,0,61.44,61.44,61.44,0,0,1,61.44,0ZM74.58,36.8c1.74-1.77,2.83-3.18,5-1l7,7.13c2.29,2.26,2.17,3.58,0,5.69L73.33,61.83,86.08,74.58c1.77,1.74,3.18,2.83,1,5l-7.13,7c-2.26,2.29-3.58,2.17-5.68,0L61.44,73.72,48.63,86.53c-2.1,2.15-3.42,2.27-5.68,0l-7.13-7c-2.2-2.15-.79-3.24,1-5l12.73-12.7L36.35,48.64c-2.15-2.11-2.27-3.43,0-5.69l7-7.13c2.15-2.2,3.24-.79,5,1L61.44,49.94,74.58,36.8Z" />
                                 </svg>
                             </button>
                         </div>
@@ -147,38 +181,45 @@
             </div>
         </div>
         <div class="card" style="margin: 25px 0px;">
-            <div class="card-header panel-primary" >
-            <b>LOGBOOK</b>
-            <span id="logbook-username" style="font-size: 18px; margin-left: 150px; float:right; color:#fff; display: none;"></span>
+            <div class="card-header panel-primary">
+                <b>LOGBOOK</b>
+                <span id="logbook-username"
+                    style="font-size: 18px; margin-left: 150px; float:right; color:#fff; display: none;"></span>
             </div>
 
             <div class="table-responsive" style="max-height: 600px; overflow-y: auto; display: inline-block;">
                 <table class="table table-striped">
                     <thead>
-                       <tr>
-                        <th class="hdr" scope="col" style="width: 5%">JUMP#</th> 
-                        <th class="hdr" scope="col" style="width: 7%">DATE</th> 
-                        <th class="hdr" scope="col" style="width: 5%">TIME</th> 
-                        <th class="hdr" scope="col" style="width: 10%">PLACE</th> 
-                        <th class="hdr" scope="col" style="width: 5%">AIRCRAFT</th> 
-                        <th class="hdr" scope="col" style="width: 7%">MAX ALT</th> 
-                        <th class="hdr" scope="col" style="width: 7%">MAX SPD</th>
-                        <th class="hdr" scope="col" style="width: 5%">DISCIPLINE</th> 
-                        <th class="hdr" scope="col">DESCRIPTION</th> 
-                        <th class="hdr" scope="col" style="width: 10%">TRACK</th> 
-                        <th class="hdr" scope="col" style="width: 5%">ACTION</th> 
-                            </tr>                          
+                        <tr>
+                            <th class="hdr" scope="col" style="width: 5%">JUMP#</th>
+                            <th class="hdr" scope="col" style="width: 7%">DATE</th>
+                            <th class="hdr" scope="col" style="width: 5%">TIME</th>
+                            <th class="hdr" scope="col" style="width: 10%">PLACE</th>
+                            <th class="hdr" scope="col" style="width: 5%">AIRCRAFT</th>
+                            <th class="hdr" scope="col" style="width: 7%">MAX ALT</th>
+                            <th class="hdr" scope="col" style="width: 7%">MAX SPD</th>
+                            <th class="hdr" scope="col" style="width: 5%">DISCIPLINE</th>
+                            <th class="hdr" scope="col">DESCRIPTION</th>
+                            <th class="hdr" scope="col" style="width: 10%">TRACK</th>
+                            <th class="hdr" scope="col" style="width: 5%">ACTION</th>
+                        </tr>
                     </thead>
                     <tbody id="logbook"></tbody>
                 </table>
             </div>
-            <a id="downloadGpx" href="" target="_blank" ></a>
+            <a id="downloadGpx" href="" target="_blank"></a>
         </div>
         <div class="row">
             <div class="col-md-4 col-sm-12">
-                 <iframe id="meteoblue" src="https://www.meteoblue.com/en/weather/maps/widget/Berlin_Berlin_2822224?windAnimation=0lengthunit=metric&zoom=5&autowidth=auto" frameborder="0" scrolling="NO" allowtransparency="true" sandbox="allow-same-origin allow-scripts allow-popups allow-popups-to-escape-sandbox" style="width: 100%; height: 420px"></iframe>
-                 <div>
-                    <a id="meteoblue-sub" href="https://www.meteoblue.com/en/weather/maps/Berlin_Berlin_2822224?utm_source=weather_widget&utm_medium=linkus&utm_content=map&utm_campaign=Weather%2BWidget" target="_blank" rel="noopener">meteoblue</a>
+                <iframe id="meteoblue"
+                    src="https://www.meteoblue.com/en/weather/maps/widget/Berlin_Berlin_2822224?windAnimation=0lengthunit=metric&zoom=5&autowidth=auto"
+                    frameborder="0" scrolling="NO" allowtransparency="true"
+                    sandbox="allow-same-origin allow-scripts allow-popups allow-popups-to-escape-sandbox"
+                    style="width: 100%; height: 420px"></iframe>
+                <div>
+                    <a id="meteoblue-sub"
+                        href="https://www.meteoblue.com/en/weather/maps/Berlin_Berlin_2822224?utm_source=weather_widget&utm_medium=linkus&utm_content=map&utm_campaign=Weather%2BWidget"
+                        target="_blank" rel="noopener">meteoblue</a>
                 </div>
             </div>
             <div class="col-md-4 col-sm-12">
@@ -228,13 +269,15 @@
                 <div class="battery">
                     <h5>Battery</h5>
                     <div class="progress">
-                        <div id="battery" class="progress-bar bg-success" role="progressbar" style="width: 80%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+                        <div id="battery" class="progress-bar bg-success" role="progressbar" style="width: 80%"
+                            aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
                     </div>
                 </div>
                 <div class="sd-card">
                     <h5>SD CARD</h5>
                     <div class="progress">
-                        <div id="sd-card" class="progress-bar bg-danger" role="progressbar" style="width: 30%" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
+                        <div id="sd-card" class="progress-bar bg-danger" role="progressbar" style="width: 30%"
+                            aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
                     </div>
                 </div>
             </div>
@@ -244,14 +287,15 @@
         <div class="text-center">
             <p> Airlog V0.9 &nbsp
                 &copy; 2022
-               ajanky @ <strong>CRWDgs.com</strong> – All Rights Reserved
+                ajanky @ <strong>CRWDgs.com</strong> – All Rights Reserved
             </p>
 
         </div>
     </div>
 
     <!-- Modal -->
-    <div class="modal fade" id="logModal" tabindex="-1" role="dialog" aria-labelledby="logModalTitle" aria-hidden="true">
+    <div class="modal fade" id="logModal" tabindex="-1" role="dialog" aria-labelledby="logModalTitle"
+        aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -275,7 +319,7 @@
                             <textarea class="form-control" id="log-aircraft"></textarea>
                         </div>
                         <div class="form-group">
-                          <label for="log-type" class="col-form-label">Discipline:</label>
+                            <label for="log-type" class="col-form-label">Discipline:</label>
                             <select class="form-select" id="log-type">
                                 <option selected>Discipline</option>
                                 <option value="CRW">CRW</option>
@@ -284,7 +328,7 @@
                                 <option value="Wing">Wing</option>
                                 <option value="CP">CP</option>
                                 <option value="Base">Base</option>
-                              </select>
+                            </select>
 
                         </div>
                         <div class="form-group">
@@ -302,7 +346,8 @@
     </div>
 
     <!-- Modal -->
-    <div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="loginModalTitle" aria-hidden="true">
+    <div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="loginModalTitle"
+        aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -332,12 +377,16 @@
     </div>
 
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
     <script src="./bootstrap/js/bootstrap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/10.0.0/bootstrap-slider.min.js"></script>
- 
+
     <!-- AL Range Slider JS -->
     <script src="./vendor/al-range-slider/js/al-range-slider.js"></script>
 
@@ -348,7 +397,7 @@
         // var serverUrl = "http://localhost:3000/api/";
         var serverUrl = "https://airlog.app/api/";
         var first_gpx = false, map, wp = true, first_p = true, first_s = true;
-        var logbookList =[], logbookKeys =[], altSI = [], directionSI = [], speedSI = [], tempSI = [];
+        var logbookList = [], logbookKeys = [], altSI = [], directionSI = [], speedSI = [], tempSI = [];
         var timezone = 0;
         var metric = 1;
 
@@ -378,7 +427,7 @@
 
                     var reader = new FileReader();
                     reader.readAsText(file, "UTF-8");
-                    reader.onload = function(evt) {
+                    reader.onload = function (evt) {
                         AirLog.drawTrackLine(evt.target.result);
                     }
 
@@ -390,13 +439,13 @@
 
         function _show(files) {
             first_p = true;
-        //    JB.GPX2GM.setparameters();
+            //    JB.GPX2GM.setparameters();
             if (map) {
                 map.Clear();
             }
             map = null;
-        //    map = new JB.makeMap("map1");
-        //    map.ShowGPX(files, "OSMDE");
+            //    map = new JB.makeMap("map1");
+            //    map.ShowGPX(files, "OSMDE");
             xferFiles(files);
         }
 
@@ -415,24 +464,24 @@
                 $.ajax({
                     type: "POST",
                     url: serverUrl + "dashboard/getDownloadUrl",
-                    data: { 
-                        uid: uid, 
-                        filename: filename.replace('.gpx', '.csv')
+                    data: {
+                        uid: uid,
+                        filename: filename.replace('.gpx', '.csv').replace('.csv', '') + '.csv'
                     }
                 }).then((response) => {
                     var logFileUrl = response.url;
                     if (type == 'edit') {
-    
+
                     } else if (type == 'view') {
                         // Selected Row
-                        var currentItem = Object.values(logbookList).find(function(item) {
-                            return item.logFile.replace('.gpx', '') == filename.replace('.gpx', '');
+                        var currentItem = Object.values(logbookList).find(function (item) {
+                            return item.logFile.replace('.csv', '') == filename.replace('.csv', '');
                         }),
-                        currentIndex = Object.values(logbookList).findIndex(function(item) {
-                            return item.logFile.replace('.gpx', '') == filename.replace('.gpx', '');
-                        });
+                            currentIndex = Object.values(logbookList).findIndex(function (item) {
+                                return item.logFile.replace('.csv', '') == filename.replace('.csv', '');
+                            });
 
-                        $('#logbook').find('tr:nth-child(' + ( Object.values(logbookList).length - currentIndex ) + ')').addClass('table-active').siblings().removeClass('table-active');
+                        $('#logbook').find('tr:nth-child(' + (Object.values(logbookList).length - currentIndex) + ')').addClass('table-active').siblings().removeClass('table-active');
 
                         currentFileName = currentItem.logNr;
                         show(logFileUrl, filename);
@@ -464,26 +513,26 @@
 
                         metric = ("true" === response.metric);
                         timezone = parseInt(response.timezone);
-                        console.log ("timezone %i", timezone);
-                        console.log ("units metric %s", metric);
+                        console.log("timezone %i", timezone);
+                        console.log("units metric %s", metric);
 
-                        if (metric) { document.getElementById('lastjump-altitude').innerHTML = logbookList[key].logAlt + ' m';}
-                        else { document.getElementById('lastjump-altitude').innerHTML = parseInt(logbookList[key].logAlt*3.28) + ' ft';}
-                        document.getElementById('lastjump-date').innerHTML = logbookList[key].logDate + ' @ ' + logbookList[key].logTime.substring(0,5);
-                        document.getElementById('lastjump-place').innerHTML = logbookList[key].logPlace; 
-                       
-           
+                        if (metric) { document.getElementById('lastjump-altitude').innerHTML = logbookList[key].logAlt + ' m'; }
+                        else { document.getElementById('lastjump-altitude').innerHTML = parseInt(logbookList[key].logAlt * 3.28) + ' ft'; }
+                        document.getElementById('lastjump-date').innerHTML = logbookList[key].logDate + ' @ ' + logbookList[key].logTime.substring(0, 5);
+                        document.getElementById('lastjump-place').innerHTML = logbookList[key].logPlace;
+
+
                         logbookItem = `<tr class="table-active">`;
                     } else {
                         logbookItem = `<tr>`;
                     }
 
                     if (metric) { var logAlt = parseInt(logbookList[key].logAlt) + ' m'; }
-                    else {  var logAlt = parseInt(logbookList[key].logAlt*3.28) + ' ft';}
+                    else { var logAlt = parseInt(logbookList[key].logAlt * 3.28) + ' ft'; }
                     logbookItem += `
                                             <th scope="row">${logbookList[key].logNr}</th>
                                             <td>${logbookList[key].logDate}</td>
-                                            <td>${logbookList[key].logTime.substring(0,5)}</td>
+                                            <td>${logbookList[key].logTime.substring(0, 5)}</td>
                                             <td>${logbookList[key].logPlace}</td>
                                             <td>${logbookList[key].logAirc}</td>
                                             <td>${logAlt}</td> 
@@ -492,15 +541,15 @@
                                             <td>${logbookList[key].logDesc}</td>
                                             <td>${logbookList[key].logFile}</td>
                                             <td class="table-button">` +
-                                                (uid ? 
-                                                    `<button type="button" class="btn-edit btn btn-primary btn-sm mr-2"
+                        (uid ?
+                            `<button type="button" class="btn-edit btn btn-primary btn-sm mr-2"
                                                         onClick="onSelectGpx('${logbookList[key].logNr}', 'edit')"
                                                     >
                                                         <i class="fa fa-edit"></i>
                                                     </button>` : ""
-                                                ) +
-                                                (logbookList[key].logFile != " " ?
-                                                    `<button type="button" class="btn-view btn btn-primary btn-sm mr-2"
+                        ) +
+                        (logbookList[key].logFile != " " ?
+                            `<button type="button" class="btn-view btn btn-primary btn-sm mr-2"
                                                         onClick="onSelectGpx('${logbookList[key].logFile}', 'view')"
                                                     >
                                                         <i class="fa fa-eye"></i>
@@ -510,8 +559,8 @@
                                                     >
                                                         <i class="fa fa-download"></i>
                                                     </button>` : ""
-                                                )+
-                                            `</td>
+                        ) +
+                        `</td>
                                     </tr>`;
                     $("#logbook").append(logbookItem);
                 }
@@ -526,15 +575,15 @@
                     document.getElementById("meteoblue-sub").href = `https://www.meteoblue.com/en/weather/maps/city_country_${geonameId}?windAnimation~rainbow~auto~10%20m%20above%20gnd~none`;
                 })
 
-                document.getElementById('battery').style.width = response.battery + '%';  
-                document.getElementById('sd-card').style.width = ((response.cardInfo.usedSize / response.cardInfo.totalSize) * 100).toFixed(0) + '%'; 
+                document.getElementById('battery').style.width = response.battery + '%';
+                document.getElementById('sd-card').style.width = ((response.cardInfo.usedSize / response.cardInfo.totalSize) * 100).toFixed(0) + '%';
 
                 if (uid) {
                     document.getElementById('navbar-username').style.display = 'block';
                     document.getElementById('navbar-username').innerHTML = response.callsign // ? response.callsign : "";
                     /////
                     document.getElementById('logbook-username').style.display = 'block';
-                    document.getElementById('logbook-username').innerHTML = response.username  + "&nbsp;&nbsp;-&nbsp;&nbsp;" + response.license;
+                    document.getElementById('logbook-username').innerHTML = response.username + "&nbsp;&nbsp;-&nbsp;&nbsp;" + response.license;
                     /////
 
                     metric = ("true" === response.metric);
@@ -572,7 +621,7 @@
                         value: 0,
                         tooltip: 'always',
                     });
-                    
+
                     document.getElementById('winds-title').innerHTML = '<h4> Windsaloft ' + currentCity + ',  <span style = "text-transform:uppercase;" >' + currentCountry + ' </span> at ' + Wtime + ':00h </h4>';
                     document.getElementById('direction-img').style.display = 'block';
                     showWinds(0);
@@ -616,8 +665,7 @@
             var logAirc = document.getElementById("log-aircraft").value;
             var logType = document.getElementById("log-type").value;
             var logDesc = document.getElementById("log-desc").value;
-            if (!logNr || !logbookList[logNr] || !logAirc  || !logType ) 
-            {
+            if (!logNr || !logbookList[logNr] || !logAirc || !logType) {
                 alert("Please enter all log detail info!");
             }
 
@@ -656,7 +704,7 @@
                         logbookItem += `
                                                 <th scope="row">${logbookList[key].logNr}</th>
                                                 <td>${logbookList[key].logDate}</td>
-                                                <td>${logbookList[key].logTime.substring(0,5)}</td>
+                                                <td>${logbookList[key].logTime.substring(0, 5)}</td>
                                                 <td>${logbookList[key].logPlace}</td>
                                                 <td>${logbookList[key].logAirc}</td>
                                                 <td>${logbookList[key].logAlt}</td>
@@ -665,15 +713,15 @@
                                                 <td>${logbookList[key].logDesc}</td>
                                                 <td>${logbookList[key].logFile}</td>
                                                 <td class="table-button">` +
-                                                    (uid ? 
-                                                        `<button type="button" class="btn btn-primary btn-sm mr-2"
+                            (uid ?
+                                `<button type="button" class="btn btn-primary btn-sm mr-2"
                                                             onClick="onSelectGpx('${logbookList[key].logNr}', 'edit')"
                                                         >
                                                             <i class="fa fa-edit"></i>
                                                         </button>` : ""
-                                                    ) +
-                                                    (logbookList[key].logFile != " " ?
-                                                        `<button type="button" class="btn btn-primary btn-sm mr-2"
+                            ) +
+                            (logbookList[key].logFile != " " ?
+                                `<button type="button" class="btn btn-primary btn-sm mr-2"
                                                             onClick="onSelectGpx('${logbookList[key].logFile}', 'view')"
                                                         >
                                                             <i class="fa fa-eye"></i>
@@ -683,8 +731,8 @@
                                                         >
                                                             <i class="fa fa-download"></i>
                                                         </button>` : ""
-                                                    )+
-                                                `</td>
+                            ) +
+                            `</td>
                                         </tr>`;
                         $("#logbook").append(logbookItem);
                     }
@@ -729,17 +777,17 @@
         }
 
         function showWinds(value) {
-            if (metric) {document.getElementById('winds-alt').innerText = altSI[value] + ' m';}
-            else {document.getElementById('winds-alt').innerText = (altSI[value] * 3.3334).toFixed(0) + ' ft';}
+            if (metric) { document.getElementById('winds-alt').innerText = altSI[value] + ' m'; }
+            else { document.getElementById('winds-alt').innerText = (altSI[value] * 3.3334).toFixed(0) + ' ft'; }
             document.getElementById('winds-direction').innerText = directionSI[altSI[value]] + "º";
-            if (metric) { document.getElementById('winds-speed').innerText = (speedSI[altSI[value]]/3.6).toFixed(0) + " m/s";}
-            else  { document.getElementById('winds-speed').innerText = (speedSI[altSI[value]]*0.534).toFixed(0) + " kts";}
-            if (metric) {document.getElementById('winds-temp').innerText = tempSI[altSI[value]] + " ºC";}
-            else  {document.getElementById('winds-temp').innerText = (tempSI[altSI[value]] * 9/5 +32).toFixed(0) + " ºF";}
-            document.getElementById("direction-img").style.transform = `scale(${speedSI[altSI[value]]/125+0.3}) rotate(${directionSI[altSI[value]]}deg)`;
+            if (metric) { document.getElementById('winds-speed').innerText = (speedSI[altSI[value]] / 3.6).toFixed(0) + " m/s"; }
+            else { document.getElementById('winds-speed').innerText = (speedSI[altSI[value]] * 0.534).toFixed(0) + " kts"; }
+            if (metric) { document.getElementById('winds-temp').innerText = tempSI[altSI[value]] + " ºC"; }
+            else { document.getElementById('winds-temp').innerText = (tempSI[altSI[value]] * 9 / 5 + 32).toFixed(0) + " ºF"; }
+            document.getElementById("direction-img").style.transform = `scale(${speedSI[altSI[value]] / 125 + 0.3}) rotate(${directionSI[altSI[value]]}deg)`;
         }
 
-        $('#winds-slider').on('slide', function(event){
+        $('#winds-slider').on('slide', function (event) {
             showWinds(event.value);
         });
 
@@ -767,7 +815,7 @@
                         if (!loadSucess) return;
 
                         //document.title = "d3.gpx - " + theFile.name.split(".")[0];
-                        document.title = "d3.gpx - " + theFile.name;
+                        document.title = "d3.csv - " + theFile.name;
 
                         var desc = document.getElementById("appTitle").getElementsByClassName("sample")[0];
                         //desc.innerHTML = theFile.name.split(".")[0].substr(0,17)+"...";
